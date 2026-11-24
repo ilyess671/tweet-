@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<style>
+:root{--split:960px;--pink:#ff2d95;--violet:#7b2cff;--deep:#1b0633;--gold:#ffc83d;--green:#22e06b}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family:'Barlow Condensed',sans-serif;font-style:italic}
+.frame{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--deep)}
+
+/* ---------- gameplay ---------- */
+.game{position:absolute;left:0;top:0;width:1080px;height:var(--split);overflow:hidden;background:url(game.jpg) center/cover}
+.game::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),transparent 25%,transparent 70%,rgba(0,0,0,.55))}
+.game.freeze{filter:saturate(.75) contrast(1.15)}
+.game.blur{filter:blur(14px) brightness(.55)}
+.flash{position:absolute;left:0;top:0;width:1080px;height:var(--split);z-index:2;box-shadow:inset 0 0 180px 50px rgba(255,255,255,.9);background:rgba(255,255,255,.12)}
+.ph{position:absolute;left:40px;top:230px;z-index:3;font:italic 700 26px 'Barlow Condensed';color:#fff;background:rgba(0,0,0,.5);border:2px dashed rgba(255,255,255,.7);padding:6px 16px;border-radius:10px}
+.lens{position:absolute;z-index:3;border:7px solid var(--gold);border-radius:50%;box-shadow:0 0 0 5px rgba(0,0,0,.4),0 0 40px rgba(255,200,61,.6)}
+
+/* HUD timer (top-right, wanted-level style) */
+.hud{position:absolute;right:40px;top:140px;z-index:4;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.hud .box{display:flex;align-items:center;gap:18px;background:rgba(10,4,22,.78);border:4px solid #fff;padding:6px 26px 6px 22px;transform:skewX(-14deg);box-shadow:8px 8px 0 rgba(0,0,0,.6)}
+.hud .box>*{transform:skewX(14deg)}
+.hud .lbl{font:italic 800 30px 'Barlow Condensed';color:rgba(255,255,255,.8);letter-spacing:2px}
+.hud .n{font:italic 900 96px/1 'Barlow Condensed';color:#fff;text-shadow:0 0 20px rgba(255,255,255,.5)}
+.hud.hot .n{color:#ff3b3b;text-shadow:0 0 24px rgba(255,59,59,.8)}
+.stars{display:flex;gap:6px}
+.stars svg{width:52px;height:52px;filter:drop-shadow(3px 3px 0 #000)}
+.tictac{position:absolute;right:300px;top:96px;font:italic 900 40px 'Barlow Condensed';color:#fff;-webkit-text-stroke:8px #000;paint-order:stroke fill;transform:rotate(-10deg)}
+
+/* ---------- subtitles (just above junction) ---------- */
+.subs{position:absolute;left:30px;right:30px;top:735px;z-index:6;text-align:center;
+  font:italic 900 92px/1 'Barlow Condensed';text-transform:uppercase;color:#fff;
+  -webkit-text-stroke:16px #000;paint-order:stroke fill;text-shadow:0 8px 0 #000}
+.subs .cur{color:#ffe600;display:inline-block;transform:scale(1.14) rotate(-2deg);margin:0 12px}
+
+/* ---------- bottom zone ---------- */
+.bottom{position:absolute;left:0;top:var(--split);width:1080px;height:960px;overflow:hidden}
+.bottom svg.sunset{position:absolute;inset:0;width:100%;height:100%}
+
+/* junction banner */
+.banner{position:absolute;left:40px;right:40px;top:calc(var(--split) - 80px);z-index:5;min-height:150px;padding:14px 40px 18px;
+  transform:skewX(-14deg);background:linear-gradient(180deg,#141414,#000);border:6px solid #fff;border-radius:20px;
+  box-shadow:0 10px 0 rgba(0,0,0,.6),0 0 0 3px #000,0 0 40px rgba(255,45,149,.45);display:flex;align-items:center;justify-content:center}
+.banner .in{transform:skewX(14deg);text-align:center;color:#fff}
+.banner .k{margin-bottom:4px;font:italic 800 34px 'Barlow Condensed';color:var(--gold);letter-spacing:3px;text-transform:uppercase}
+.banner .t{font:italic 900 60px/1 'Barlow Condensed';text-transform:uppercase}
+.banner.big .t{font-size:88px}
+.banner.pop{transform:skewX(-14deg) scale(1.06) rotate(-1.5deg)}
+.speed{position:absolute;z-index:4;height:10px;border-radius:5px;background:#fff}
+
+/* answer bars */
+.bars{position:absolute;left:56px;right:84px;top:150px;display:flex;flex-direction:column;gap:40px}
+.bar{position:relative;height:150px;transform:skewX(-14deg);border:5px solid #fff;border-radius:20px;overflow:hidden;
+  background:linear-gradient(90deg,#ff2d95 0%,#b21fd0 45%,#3a0e7a 100%);
+  box-shadow:0 12px 0 #2a0640,0 12px 0 5px #000,0 0 0 3px #000,0 26px 30px rgba(0,0,0,.5)}
+.bar-wrap{position:relative}
+.bar .sky{position:absolute;right:0;bottom:0;width:70%;height:70%;opacity:.55}
+.bar .gloss{position:absolute;left:0;right:0;top:0;height:45%;background:linear-gradient(180deg,rgba(255,255,255,.28),transparent)}
+.bar .L{position:absolute;left:0;top:0;bottom:0;width:150px;display:grid;place-items:center;background:linear-gradient(180deg,#fff,#ffd6ec);border-right:6px solid #fff}
+.bar .L span{transform:skewX(14deg);font:italic 900 112px/1 'Barlow Condensed';color:#c0147a;text-shadow:4px 4px 0 rgba(0,0,0,.15)}
+.bar .txt{position:absolute;left:180px;right:30px;top:0;bottom:0;display:flex;align-items:center;transform:skewX(14deg);
+  font:italic 800 50px/1.02 'Barlow Condensed';color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.55)}
+.bar.ghost{background:rgba(20,6,40,.55);border-style:dashed;border-color:rgba(255,255,255,.45);box-shadow:none}
+.bar.ghost .L{background:transparent;border-right:4px dashed rgba(255,255,255,.4)}
+.bar.ghost .L span{color:rgba(255,255,255,.35);text-shadow:none}
+.bar.popping{transform:skewX(-14deg) scale(1.06)}
+.bar-wrap.popping::after{content:"";position:absolute;inset:-20px -24px;border:5px solid rgba(255,255,255,.75);border-radius:30px;transform:skewX(-14deg)}
+.bar.dim{filter:grayscale(1) brightness(.4)}
+.bar.win{transform:skewX(-14deg) scale(1.05);background:linear-gradient(90deg,#1fe070,#0da452 55%,#06622f);
+  box-shadow:0 12px 0 #03391b,0 12px 0 5px #000,0 0 0 3px #000,0 0 90px 24px rgba(34,224,107,.6)}
+.bar.win .L span{color:#0a8a43}
+.check{position:absolute;right:-24px;top:-34px;z-index:3;width:96px;height:96px;border-radius:50%;background:#fff;border:5px solid #000;display:grid;place-items:center;font:900 62px sans-serif;color:#0da452;box-shadow:5px 5px 0 #000}
+
+.tagnum{position:absolute;z-index:4;left:44px;top:150px;font:italic 800 34px 'Barlow Condensed';color:#fff;background:rgba(0,0,0,.45);border:3px solid rgba(255,255,255,.8);padding:4px 22px;transform:skewX(-14deg);letter-spacing:2px}
+.tagnum b{color:var(--gold)}
+
+/* center band (reveal / end) */
+.band{position:absolute;left:0;right:0;z-index:5;text-align:center;background:linear-gradient(90deg,transparent,rgba(0,0,0,.78) 18%,rgba(0,0,0,.78) 82%,transparent);padding:26px 0 30px}
+.band .big{font:italic 900 150px/1 'Barlow Condensed';color:var(--gold);text-transform:uppercase;-webkit-text-stroke:10px #000;paint-order:stroke fill;text-shadow:0 8px 0 #000}
+.band .small{font:italic 800 46px 'Barlow Condensed';color:#fff;letter-spacing:6px;text-transform:uppercase}
+.confetti i{position:absolute;width:16px;height:28px;border-radius:3px;z-index:4}
+
+.sub-bar .bar{background:linear-gradient(90deg,#ff1f3d,#c80f50 60%,#6a0b3a);height:170px}
+.sub-bar .bar .txt{left:40px;justify-content:center;font-size:84px;letter-spacing:2px}
+.end-note{position:absolute;left:0;right:0;top:400px;text-align:center;font:italic 800 52px 'Barlow Condensed';color:#fff;text-shadow:0 4px 0 #000}
+.end-note b{color:var(--gold)}
+</style></head>
+<body><div class="frame" id="f"></div>
+<script>
+const F=+(new URLSearchParams(location.search).get('f')||1);
+const TITLE="Un flamant rose bloque ton capot au feu vert";
+const ANS=["Je klaxonne en rythme pour qu'il danse","J'attends qu'il descende, calmement","Je l'emmène à la plage, il a l'air stressé"];
+
+const palm=(x,y,s,flip)=>`<g transform="translate(${x} ${y}) scale(${flip?-s:s} ${s})" fill="#14031f">
+  <path d="M0 0 C6 -120 18 -230 60 -330 l14 4 C36 -226 24 -118 22 0z"/>
+  <g transform="translate(66 -330)">
+   <path d="M0 0 q-110 -40 -200 30 q100 -20 200 -30z"/><path d="M0 0 q-70 -90 -180 -90 q100 30 180 90z"/>
+   <path d="M0 0 q10 -110 100 -150 q-60 70 -100 150z"/><path d="M0 0 q100 -60 200 -10 q-110 -10 -200 10z"/>
+   <path d="M0 0 q120 10 170 100 q-80 -60 -170 -100z"/><path d="M0 0 q-40 60 -40 160 q-10 -90 40 -160z"/>
+  </g></g>`;
+const skyline=(w,h,col)=>{let s='',x=0,i=0;while(x<w){const bw=30+(i*37)%50,bh=h*(.3+((i*53)%60)/100);s+=`<rect x="${x}" y="${h-bh}" width="${bw}" height="${bh}"/>`;x+=bw+4;i++}return `<g fill="${col}">${s}</g>`};
+
+function sunset(){
+  let stripes='';for(let i=0;i<7;i++)stripes+=`<rect x="300" y="${410+i*26+i*i*2}" width="480" height="${5+i*2}" fill="#2a0848"/>`;
+  return `<svg class="sunset" viewBox="0 0 1080 960" preserveAspectRatio="none">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#170530"/><stop offset=".35" stop-color="#4a1170"/><stop offset=".65" stop-color="#b8237f"/><stop offset=".85" stop-color="#ff6a4d"/><stop offset="1" stop-color="#ffb04a"/></linearGradient>
+  <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe066"/><stop offset="1" stop-color="#ff3d7f"/></linearGradient>
+  <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a145f"/><stop offset="1" stop-color="#14031f"/></linearGradient></defs>
+  <rect width="1080" height="960" fill="url(#g)"/>
+  <circle cx="540" cy="560" r="230" fill="url(#sun)" opacity=".9"/>${stripes}
+  ${skyline(1080,720,'#2a0848').replace(/<g /,'<g opacity=".9" ')}
+  <rect y="720" width="1080" height="240" fill="url(#sea)"/>
+  <g stroke="#ff6aa8" stroke-width="3" opacity=".35">${[740,770,810,860,920].map(y=>`<line x1="0" y1="${y}" x2="1080" y2="${y}"/>`).join('')}</g>
+  ${palm(-30,960,1.5)}${palm(1110,960,1.4,1)}${palm(150,980,1.0)}${palm(940,990,.9,1)}
+  <rect width="1080" height="960" fill="rgba(10,2,25,.12)"/></svg>`;
+}
+const star=on=>`<svg viewBox="0 0 24 24"><path d="M12 1.8l3 6.5 7 .8-5.2 4.8 1.4 7-6.2-3.6-6.2 3.6 1.4-7L1 9.1l7-.8z" fill="${on?'#fff':'rgba(255,255,255,.18)'}" stroke="#000" stroke-width="1.2"/></svg>`;
+function hud(n,hot){return `<div class="hud ${hot?'hot':''}">${hot?'<div class="tictac">TIC… TAC !</div>':''}
+  <div class="stars">${[0,1,2,3,4].map(i=>star(i<n)).join('')}</div>
+  <div class="box"><span class="lbl">TEMPS</span><span class="n">${n}</span></div></div>`}
+const skyBar=`<svg class="sky" viewBox="0 0 600 100" preserveAspectRatio="none">${skyline(600,100,'#1a0436')}</svg>`;
+function bars(st){return `<div class="bars">${ANS.map((t,i)=>{const s=st[i]||'',L='ABC'[i];
+  return `<div class="bar-wrap ${s}"><div class="bar ${s}">${s==='ghost'?'':skyBar+'<div class="gloss"></div>'}<div class="L"><span>${L}</span></div>${s==='ghost'?'':`<div class="txt">${t}</div>`}</div>${s==='win'?'<div class="check">✓</div>':''}</div>`}).join('')}</div>`}
+const subs=(w,c)=>`<div class="subs">${w.map((x,i)=>i===c?`<span class="cur">${x}</span>`:x).join(' ')}</div>`;
+const banner=(k,t,cls='')=>`<div class="banner ${cls}"><div class="in">${k?`<div class="k">${k}</div>`:''}<div class="t">${t}</div></div></div>`;
+const tag=`<div class="tagnum">SITUATION <b>#12</b></div>`;
+
+let h='';
+if(F===1){
+  h=`<div class="game freeze"></div><div class="flash"></div>
+   <div class="lens" style="left:360px;top:360px;width:330px;height:330px"></div>
+   <div class="ph">▶ ton extrait · freeze à 5,0 s</div>
+   ${subs(["DANS","CETTE","SITUATION…"],2)}
+   <div class="bottom">${sunset()}<div class="bars" style="top:200px">${''}</div>${bars(['ghost','ghost','ghost']).replace('class="bars"','class="bars" style="top:200px"')}</div>${tag}
+   ${banner('Dans cette situation…',TITLE,'pop')}
+   <div class="speed" style="left:0;top:910px;width:60px"></div><div class="speed" style="left:-20px;top:1050px;width:90px"></div>
+   <div class="speed" style="right:-10px;top:900px;width:80px"></div><div class="speed" style="right:0;top:1060px;width:50px"></div>`;
+}
+if(F===2){
+  h=`<div class="game freeze"></div>${hud(3,true)}
+   ${subs(["TU","L'EMMÈNES","À LA PLAGE ?"],1)}
+   <div class="bottom">${sunset()}${bars(['','','popping']).replace('class="bars"','class="bars" style="top:200px"')}</div>${tag}
+   ${banner('Dans cette situation…',TITLE)}`;
+}
+if(F===3){
+  const cols=['#ff2d95','#ffc83d','#22e06b','#fff','#7b2cff','#ff6a4d'];let c='';
+  for(let i=0;i<50;i++)c+=`<i style="left:${(i*137)%1080}px;top:${(i*211)%880}px;background:${cols[i%6]};transform:rotate(${(i*47)%360}deg)"></i>`;
+  h=`<div class="game freeze"></div><div class="confetti">${c}</div>${hud(0,false).replace('<span class="n">','<span class="n" style="color:#ff3b3b">')}
+   <div class="band" style="top:330px"><div class="small">Bonne réponse</div><div class="big">Réponse B !</div></div>
+   ${subs(["IL","A","LA","PRIORITÉ !"],3)}
+   <div class="bottom">${sunset()}${bars(['dim','win','dim']).replace('class="bars"','class="bars" style="top:200px"')}</div>${tag}
+   ${banner('Dans cette situation…',TITLE)}`;
+}
+if(F===4){
+  h=`<div class="game blur"></div>
+   <div class="band" style="top:300px"><div class="big" style="font-size:130px">Et toi, t'avais<br>trouvé ?</div></div>
+   ${subs(["T'AVAIS","TROUVÉ ?"],1)}
+   <div class="bottom">${sunset()}
+     <div class="bars sub-bar" style="top:200px"><div class="bar-wrap"><div class="bar">${skyBar}<div class="gloss"></div><div class="txt">🔔 ABONNE-TOI</div></div></div></div>
+     <div class="end-note">pour la <b>prochaine situation</b> 👇</div></div>${tag}
+   ${banner('','Dis-le en commentaire !','big')}`;
+}
+document.getElementById('f').innerHTML=h;
+</script></body></html>
