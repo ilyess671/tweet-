@@ -1,0 +1,37 @@
+# ============================================================================
+#  CODE DE GTA VI — un bloc par vidéo
+#  Fichiers attendus dans entrees/ :  video-NN.mov (ou .mp4)  et  voix-NN.mp3
+# ============================================================================
+
+reglages:                 # valeurs par défaut pour toutes les vidéos
+  duree_intro: 5          # secondes de gameplay montrées avant la pause
+  volume_jeu_db: 10       # gain du son du jeu (intro)
+  volume_suite_db: 8      # gain du son du jeu pendant la suite (baisse auto sous la voix)
+  volume_voix_db: 2
+  volume_bruitages_db: -4
+  revelation_apres: 2.3   # « Réponse X » ~2,3 s après la reprise si revelation_a n'est pas donné
+
+videos:
+
+  - numero: 1
+    titre_gameplay: "Braquage à l'épicerie"    # étiquette au-dessus du gameplay
+    pause_a: 8.0                                # seconde de l'extrait où on met pause
+    revelation_a: 10.25                         # (optionnel) seconde de l'extrait où la réponse se voit
+    situation: "Jason tente un braquage discret à l'épicerie."
+    surligne: [braquage, discret]               # mots surlignés en jaune
+    reponses:
+      A: "La police attend Jason à la sortie"
+      B: "Il se fait désarmer par une gonzesse"
+      C: "Le braquage se passe sans souci"
+    bonne_reponse: B
+    script: |                                   # texte de la voix off (référence)
+      [mysterious] Dans cette situation…
+      Jason tente un braquage… [whispers] discret… à l'épicerie. [sarcastic] Bon, avec son débardeur et sa coupe mulet, la discrétion, c'est pas gagné.
+      A : la police attend Jason à la sortie.
+      B : il se fait désarmer par une gonzesse.
+      C : [cheerful] le braquage se passe sans souci.
+      [excited] À toi de jouer ! T'as cinq secondes.
+      [whispers] Regarde bien…
+      [laughs] Réponse B ! Désarmé par une gonzesse… [mocking] Jason, t'as braqué l'épicerie ou c'est l'épicerie qui t'a braqué ?
+      [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
+    ajustements: {}                             # corrections ponctuelles (voir CLAUDE.md)

@@ -1,0 +1,7 @@
+entrees/*
+!entrees/.gitkeep
+sorties/*
+!sorties/.gitkeep
+.cache/
+__pycache__/
+node_modules/

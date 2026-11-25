@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#f3eff4;font-family:'Inter Tight',Inter,sans-serif}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#f3eff4}
+.blob{position:absolute;border-radius:50%;filter:blur(120px)}
+#head{position:absolute;left:30px;right:30px;top:205px;text-align:center;font:800 78px/1.05 'Inter Tight';letter-spacing:-2.5px;color:#111;z-index:5;white-space:nowrap}
+#head .h{position:absolute;left:0;right:0;top:0}
+#head span{display:inline-block;margin:0 10px}
+.pk{color:#ff2d55}.gr{color:#16b85c}
+.pill{position:absolute;z-index:7;height:62px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;gap:12px;
+  font:700 28px 'Inter Tight';color:#222;box-shadow:0 8px 24px rgba(80,40,100,.18);white-space:nowrap;padding:0 26px}
+.dot{width:14px;height:14px;border-radius:50%}
+/* gameplay card */
+#game{position:absolute;z-index:4;overflow:hidden;box-shadow:0 40px 90px rgba(90,40,120,.25),0 8px 24px rgba(90,40,120,.12)}
+#gimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#gflash{position:absolute;inset:0;background:#fff}
+#Lbtn,#Lbtn2{position:absolute;left:0;top:0;width:540px;height:140px;display:flex;align-items:center;justify-content:center;gap:16px;font:800 58px 'Inter Tight';color:#fff;letter-spacing:-1px}
+/* panel under gameplay */
+#panel{position:absolute;z-index:4;background:#fff;overflow:hidden;box-shadow:0 40px 90px rgba(90,40,120,.20),0 8px 24px rgba(90,40,120,.10)}
+.kick{position:absolute;left:40px;top:36px;display:flex;align-items:center;gap:16px;font:700 32px 'Inter Tight';color:#7a7085}
+.sq{width:60px;height:60px;border-radius:17px;display:grid;place-items:center;color:#fff;font:900 36px 'Inter Tight';position:relative;overflow:hidden;flex:none}
+.sq::after{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.05))}
+#ptitle{position:absolute;width:880px;font-weight:900;color:#111;transform-origin:0 0}
+#ptitle span{display:inline-block;margin-right:.24em}
+.hl{background:linear-gradient(transparent 58%,rgba(255,206,0,.6) 58%,rgba(255,206,0,.6) 92%,transparent 92%) no-repeat;background-size:0% 100%}
+.row{position:absolute;left:24px;width:912px;height:120px;border-radius:30px;background:#f7f5fa;border:2px solid #ece7f2;overflow:hidden}
+.row .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#34dd86,#16b85c)}
+.row .sq{position:absolute;left:18px;top:18px;width:84px;height:84px;border-radius:24px;font-size:50px}
+.row .tx{position:absolute;left:126px;right:100px;top:0;bottom:0;display:flex;align-items:center;font:800 40px/1.08 'Inter Tight';letter-spacing:-1px;color:#16121f}
+.row .ck{position:absolute;right:24px;top:28px;width:64px;height:64px;border-radius:50%;background:#fff;display:grid;place-items:center;color:#16b85c;font:900 40px 'Inter Tight'}
+.a{background:linear-gradient(160deg,#ff7ab0,#ff2d55)}.b{background:linear-gradient(160deg,#6fd0ff,#2a7bff)}.c{background:linear-gradient(160deg,#ffc15a,#ff8a00)}
+.after{position:absolute;left:0;right:0;top:1060px;text-align:center;font:600 36px 'Inter Tight';color:#8d8399;z-index:4}
+#stars svg{width:46px;height:46px}
+.tt{position:absolute;z-index:8;font:900 40px 'Inter Tight';color:#111;letter-spacing:-1px}
+.cursor{position:absolute;width:84px;height:84px;z-index:12}
+#logo{position:absolute;left:410px;top:560px;width:260px;height:260px;border-radius:50%;overflow:hidden;z-index:5;border:8px solid #fff;background:#000;box-shadow:0 30px 70px rgba(90,40,120,.30),0 0 0 3px rgba(255,45,149,.25)}
+#logo img{width:100%;height:100%;object-fit:cover;display:block}
+.sp{position:absolute;z-index:9;width:12px;height:34px;border-radius:6px}
+</style></head>
+<body><div id="root">
+  <div class="blob" id="b1" style="width:900px;height:900px;background:#ffb3c7"></div>
+  <div class="blob" id="b2" style="width:850px;height:850px;background:#cfc0ff"></div>
+  <div class="blob" id="b3" style="width:900px;height:900px;background:#b5ecd9"></div>
+  <div id="head"></div>
+  <div class="pill" id="pill"></div>
+  <div id="game"><img id="gimg"><div id="gflash"></div>
+    <div id="Lbtn">＋ S'abonner</div>
+    <div id="Lbtn2">Abonné <span style="width:56px;height:56px;border-radius:50%;background:#16b85c;display:inline-grid;place-items:center;font-size:34px">✓</span></div>
+  </div>
+  <div id="panel">
+    <div class="kick" id="kick"><div class="sq a">?</div>Code de GTA VI #1</div>
+    <div id="ptitle"></div>
+    <div id="rows"></div>
+  </div>
+  <div id="logo"><img id="logoimg"></div>
+  <div class="after" id="after">Une nouvelle situation très vite 👀</div>
+  <div id="ticks"></div><div id="spk"></div>
+  <svg class="cursor" id="cursor" viewBox="0 0 24 24"><path d="M5 2l14 9-6 1.5 3.5 7-2.8 1.4-3.5-7L5 18z" fill="#111" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"/></svg>
+</div>
+<script>
+/* Modèle d'animation « Code de GTA VI ».
+   Tout le contenu et le minutage arrivent par window.CONFIG (écrit par moteur/build.py) :
+   CONFIG.cfg = textes de la vidéo, CONFIG.T = moments clés en secondes. */
+const CFG=window.CONFIG.cfg;
+const T=window.CONFIG.T;
+
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,k)=>a+(b-a)*k;
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+const eio=x=>x<=0?0:x>=1?1:x<.5?Math.pow(2,20*x-10)/2:(2-Math.pow(2,-20*x+10))/2;
+const eoBack=x=>{if(x<=0)return 0;const c1=2,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const eoCubic=x=>1-Math.pow(1-clamp(x),3);
+const L=['A','B','C'],LC=['a','b','c'];
+
+const HEADS=[
+ [0.05,[["Code",""],["de",""],["GTA VI","pk"],["#"+CFG.num,"pk"]]],
+ [T.headSit,[["Dans",""],["cette",""],["situation…","pk"]]],
+ [T.headQuiz,[["A,",""],["B",""],["ou",""],["C ?","pk"]]],
+ [T.headPlay,[["À",""],["toi",""],["de",""],["jouer","pk"]]],
+ [T.headWatch,[["Regarde",""],["bien…","pk"]]],
+ [T.reveal,[["Réponse",""],[L[CFG.good]+" !","gr"]]],
+ [T.outro[0],[["Et",""],["toi,",""],["t'avais",""],["trouvé ?","pk"]]],
+];
+$('head').innerHTML=HEADS.map((h,i)=>`<div class="h" id="h${i}">${h[1].map(w=>`<span class="${w[1]}">${w[0]}</span>`).join('')}</div>`).join('');
+{let k=0;$('ptitle').innerHTML=CFG.title.map(w=>`<span class="${w[1]}"${w[1]==='hl'?` data-k="${k++}"`:''}>${w[0]}</span>`).join('');}
+$('logoimg').src=window.CONFIG.logo;
+$('rows').innerHTML=CFG.answers.map((a,i)=>`<div class="row" id="r${i}" style="top:${136+i*132}px"><div class="fill" id="f${i}"></div><div class="sq ${LC[i]}">${L[i]}</div><div class="tx" id="x${i}">${a}</div><div class="ck" id="ck${i}" style="opacity:0">✓</div></div>`).join('');
+$('ticks').innerHTML=T.stars.map((_,i)=>`<div class="tt" id="tk${i}">${i%2?'tac':'tic'}</div>`).join('');
+let sp='';for(let i=0;i<26;i++)sp+=`<div class="sp" id="sp${i}" style="background:${['#ff2d55','#ffc400','#16b85c','#2a7bff','#a46bff'][i%5]}"></div>`;$('spk').innerHTML=sp;
+const star=i=>`<svg id="s${i}" viewBox="0 0 24 24"><path d="M12 1.8l3 6.5 7 .8-5.2 4.8 1.4 7-6.2-3.6-6.2 3.6 1.4-7L1 9.1l7-.8z" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+
+/* ---------- géométries ---------- */
+const G0={x:40,y:600,w:1000,h:563,r:44,c:[22,20,28,1]};
+const G1={x:90,y:350,w:900,h:506,r:40,c:[22,20,28,1]};
+const BTN={x:270,y:880,w:540,h:140,r:70,c:[255,45,85,1]};
+const SUB={x:270,y:880,w:540,h:140,r:70,c:[24,20,32,1]};
+const PT={x:60,y:900,w:960,h:320,r:44};
+const PQ={x:60,y:900,w:960,h:548,r:44};
+const mixS=(A,B,k)=>{const o={};for(const p of ['x','y','w','h','r'])o[p]=lerp(A[p],B[p],k);if(A.c)o.c=A.c.map((v,i)=>lerp(v,B.c[i],k));return o};
+function seq(t,segs,first){let st=first,tilt=0,bump=0;for(const [a,b,A,B] of segs){if(t>=b)st=B;else if(t>=a){const k=eio(prog(t,a,b));st=mixS(A,B,k);tilt=Math.sin(Math.PI*k);break}}
+  for(const [a,b] of segs){const p=prog(t,b,b+.35);if(p>0&&p<1)bump=Math.sin(Math.PI*p)*0.025*(1-p)}return {st,tilt,bump}}
+
+function renderHead(t){
+  HEADS.forEach((h,i)=>{const t0=h[0],t1=i+1<HEADS.length?HEADS[i+1][0]:99;
+    [...$('h'+i).children].forEach((s,j)=>{const pin=prog(t,t0+0.15+j*0.09,t0+0.6+j*0.09),pout=prog(t,t1-0.05+j*0.05,t1+0.3+j*0.05);
+      const o=eoCubic(pin)*(1-pout);s.style.opacity=o;s.style.filter=`blur(${(1-eoCubic(pin))*22+pout*22}px)`;s.style.transform=`translateY(${(1-eoCubic(pin))*18-pout*10}px)`;});});
+}
+
+/* taille du titre ajustée pour tenir sur 2 lignes */
+let FIT=null,FITok=false;
+const computeFit=(()=>{const pt=$('ptitle');const fit=(max,min,lh)=>{let f=max;for(;f>min;f-=2){pt.style.fontSize=f+'px';pt.style.lineHeight=lh;if(pt.scrollHeight<=f*lh*2+4)break}return f};pt.style.letterSpacing='-2.8px';const big=fit(70,48,1.05);pt.style.letterSpacing='-1px';const small=fit(38,28,1.12);return {big,small}});
+
+window.render=function(t){
+  if(!FITok){FIT=computeFit();FITok=document.fonts.status==='loaded';}
+  [['b1',-200,-150],['b2',560,520],['b3',-250,1250]].forEach(([id,x,y],i)=>{const e=$(id);e.style.left=(x+Math.sin(t*.45+i*2)*70)+'px';e.style.top=(y+Math.cos(t*.35+i)*60)+'px'});
+  renderHead(t);
+
+  /* ----- gameplay card ----- */
+  const g=seq(t,[[T.move[0],T.move[1],G0,G1],[T.outro[0],T.outro[1],G1,BTN],[T.click+0.05,T.click+0.2,BTN,SUB]],G0);const S=g.st;
+  const intro=eoBack(prog(t,0,.55));
+  const rest=1-eio(prog(t,T.move[0],T.move[1]));
+  const thump=Math.sin(Math.PI*prog(t,T.pause,T.pause+.25))*0.04+Math.sin(Math.PI*prog(t,T.resume,T.resume+.25))*0.025;
+  const press=(t>T.click-0.05&&t<T.click+0.1)?-0.06:0;
+  const sc=lerp(.85,1,intro)*(1+g.bump+thump+press);
+  const ry=-6*rest-12*g.tilt*(t<T.outro[0]?1:.4), rx=4*rest+6*g.tilt, rz=-1.2*rest;
+  Object.assign($('game').style,{left:S.x+'px',top:S.y+'px',width:S.w+'px',height:S.h+'px',borderRadius:S.r+'px',
+    background:`rgba(${S.c.map((v,i)=>i<3?Math.round(v):v).join(',')})`,opacity:clamp(t/0.25),
+    transform:`perspective(1800px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(${sc})`});
+  const im=$('gimg');const frozen=t>=T.pause&&t<T.resume;
+  const punch=t<T.pause?0:(t<T.resume?eoCubic(prog(t,T.pause,T.pause+.3)):1-eoCubic(prog(t,T.resume,T.resume+.35)));
+  im.style.transform=`scale(${1+0.06*punch})`;
+  im.style.filter=frozen?`saturate(${lerp(1,.75,punch)}) contrast(1.06)`:'none';
+  const imo=1-prog(t,T.outro[0],T.outro[0]+.2);im.style.opacity=imo;im.style.filter+=imo<1?` blur(${(1-imo)*14}px)`:'';
+  $('gflash').style.opacity=t<T.pause?0:.95*(1-eoCubic(prog(t,T.pause,T.pause+.35)))+(t>=T.resume?.6*(1-eoCubic(prog(t,T.resume,T.resume+.25))):0);
+  const b1=prog(t,T.outro[1]-0.1,T.outro[1]+0.05)*(1-prog(t,T.click+0.05,T.click+0.15));$('Lbtn').style.opacity=b1;$('Lbtn').style.filter=`blur(${(1-b1)*10}px)`;
+  const b2=prog(t,T.click+0.1,T.click+0.25);$('Lbtn2').style.opacity=b2;$('Lbtn2').style.filter=`blur(${(1-b2)*10}px)`;
+  const af=prog(t,T.outro[1]+0.3,T.outro[1]+0.7);$('after').style.opacity=eoCubic(af);$('after').style.filter=`blur(${(1-eoCubic(af))*10}px)`;
+
+  /* ----- panel (situation -> quiz) ----- */
+  const p=seq(t,[[T.toQuiz[0],T.toQuiz[1],PT,PQ]],PT);const Q=p.st;
+  const pin=prog(t,T.panelIn,T.panelIn+.55),pout=prog(t,T.outro[0],T.outro[0]+.3);
+  const pv=eoCubic(pin)*(1-pout);
+  Object.assign($('panel').style,{left:Q.x+'px',top:Q.y+'px',width:Q.w+'px',height:Q.h+'px',borderRadius:Q.r+'px',opacity:pv,display:pv<=0?'none':'block',
+    filter:pv<.99?`blur(${(1-pv)*14}px)`:'none',
+    transform:`perspective(1800px) rotateX(${8*p.tilt+lerp(25,0,eoCubic(pin))}deg) translateY(${(1-eoBack(pin))*80+pout*60}px) scale(${lerp(.9,1,eoBack(pin))*(1+p.bump)*lerp(1,.9,pout)})`});
+  const kq=eio(prog(t,T.toQuiz[0],T.toQuiz[1]));
+  $('kick').style.opacity=1-kq;$('kick').style.filter=`blur(${kq*10}px)`;
+  const pt=$('ptitle');pt.style.left=lerp(40,36,kq)+'px';pt.style.top=lerp(116,26,kq)+'px';
+  pt.style.fontSize=lerp(FIT.big,FIT.small,kq)+'px';pt.style.lineHeight=lerp(1.05,1.12,kq);pt.style.letterSpacing=lerp(-2.8,-1,kq)+'px';pt.style.fontWeight=kq>.5?800:900;
+  [...pt.children].forEach((s,i)=>{const w0=T.wordT[i]-0.06;const q=prog(t,w0,w0+0.4);s.style.opacity=eoCubic(q);s.style.filter=`blur(${(1-eoCubic(q))*14}px)`;s.style.transform=`translateY(${(1-eoBack(q))*30}px)`;
+    if(s.classList.contains('hl')){const k=+s.dataset.k;s.style.backgroundSize=`${eoCubic(prog(t,T.hl+k*0.3,T.hl+0.4+k*0.3))*100}% 100%`;}});
+  const rev=prog(t,T.reveal+0.1,T.reveal+0.7);
+  for(let i=0;i<3;i++){const r=$('r'+i);const q=prog(t,T.rows[i],T.rows[i]+.5);const good=i===CFG.good;
+    const act=t>=T.rows[i]&&t<(i<2?T.rows[i+1]:T.rowsEnd);r.style.borderColor=act?'#ff7aa0':'#ece7f2';r.style.background=act?'#fff4f7':'';
+    r.style.opacity=eoCubic(q)*(good?1:lerp(1,.35,rev));r.style.filter=`blur(${(1-eoCubic(q))*12}px)`;
+    r.style.transform=`translateY(${(1-eoBack(q))*40}px) scale(${(good?1+0.03*Math.sin(Math.PI*prog(t,T.reveal+.4,T.reveal+.75)):1)*(act?1.015:1)})`;
+    if(good){$('f'+i).style.width=(eio(rev)*100)+'%';$('x'+i).style.color=rev>.55?'#fff':'#16121f';if(rev>0)r.style.borderColor='#16b85c';
+      const ck=prog(t,T.reveal+0.45,T.reveal+0.8);$('ck'+i).style.transform=`scale(${eoBack(ck)}) rotate(${lerp(-60,0,eoCubic(ck))}deg)`;$('ck'+i).style.opacity=ck>0?1:0;}}
+
+  /* ----- pill on top edge of gameplay ----- */
+  const P=$('pill');let html='',show=0,pw=400;
+  if(t<T.pause){html='<span class="dot" style="background:#2a7bff"></span>'+CFG.label;show=prog(t,.25,.5);}
+  else if(t<T.toQuiz[0]+0.2){html='<span class="dot" style="background:#ff2d55"></span>❚❚ Pause';pw=220;show=1-prog(t,T.toQuiz[0],T.toQuiz[0]+.2);}
+  else if(t>=T.pillStars&&t<T.resume){html='<div id="stars" style="display:flex;gap:8px">'+T.stars.map((_,i)=>star(i)).join('')+'</div>';pw=390;show=prog(t,T.pillStars,T.pillStars+.2);}
+  else if(t>=T.resume&&t<T.outro[0]+0.2){html='<span class="dot" style="background:#16b85c"></span>▶ La suite';pw=240;show=prog(t,T.resume,T.resume+.2)*(1-prog(t,T.outro[0],T.outro[0]+.2));}
+  if(P._h!==html){P.innerHTML=html;P._h=html;}
+  const swap=[T.pause,T.resume].reduce((m,a)=>m+(t>=a&&t<a+.2?Math.sin(Math.PI*prog(t,a,a+.2)):0),0);
+  Object.assign(P.style,{width:pw+'px',left:(540-pw/2)+'px',top:(S.y-31)+'px',opacity:show,filter:`blur(${(1-show)*10+swap*6}px)`,transform:`scale(${lerp(.8,1,eoBack(Math.min(1,show)))*(1+swap*0.08)})`});
+  if(t>=T.pillStars&&t<T.resume){T.stars.forEach((st,i)=>{const sv=$('s'+i);if(!sv)return;const on=t>=st;const q=prog(t,st,st+.35);const path=sv.firstChild;
+      path.style.fill=on?'#ffc400':'#ece7f2';path.style.stroke=on?'#e0a800':'#d6cfe0';
+      let s=on?lerp(1.8,1,eoBack(q)):1;if(t>T.timeUp)s*=1+0.15*Math.max(0,Math.sin((t-T.timeUp)*26))*(1-prog(t,T.timeUp,T.timeUp+.3));
+      sv.style.transform=`scale(${s}) rotate(${on?lerp(-40,0,eoCubic(q)):0}deg)`;sv.style.filter=on?'drop-shadow(0 0 8px rgba(255,196,0,.8))':'none';});}
+  T.stars.forEach((st,i)=>{const tk=$('tk'+i);const kp=prog(t,st,st+.5);tk.style.opacity=kp>0&&kp<1?(1-kp):0;
+    tk.style.left=(i%2?540+210:540-210-80)+'px';tk.style.top=(S.y-40-kp*26)+'px';tk.style.transform=`rotate(${i%2?10:-10}deg)`;tk.style.filter=`blur(${kp*4}px)`});
+
+  /* ----- sparkles ----- */
+  for(let i=0;i<26;i++){const e=$('sp'+i);const k=t-(T.reveal+0.45);if(k<0||k>.9){e.style.opacity=0;continue}
+    const a=i/26*Math.PI*2,d=110+eoCubic(k/.9)*240;const cx=60+24+912-56,cy=900+136+CFG.good*132+60;
+    e.style.left=(cx+Math.cos(a)*d*1.5-6)+'px';e.style.top=(cy+Math.sin(a)*d-17)+'px';e.style.opacity=1-k/.9;e.style.transform=`rotate(${a*180/Math.PI+90}deg) scaleY(${1-k})`;}
+
+  /* ----- logo ----- */
+  const lp=prog(t,T.outro[1]+0.05,T.outro[1]+0.6);const lg=$('logo');
+  lg.style.opacity=eoCubic(lp);lg.style.filter=lp<1?`blur(${(1-eoCubic(lp))*12}px)`:'none';
+  lg.style.transform=`translateY(${(1-eoBack(lp))*40}px) rotate(${lerp(-12,0,eoCubic(lp))}deg) scale(${lerp(.5,1,eoBack(lp))*(1+0.07*Math.sin(Math.PI*prog(t,T.click+0.1,T.click+0.45)))})`;
+  /* ----- cursor ----- */
+  const cu=eio(prog(t,T.click-0.6,T.click-0.1));const cur=$('cursor');cur.style.opacity=t>T.click-0.7&&t<T.click+0.9?1:0;
+  cur.style.left=lerp(860,600,cu)+'px';cur.style.top=lerp(1300,930,cu)+'px';cur.style.transform=`scale(${press<0?.82:1})`;
+};
+</script></body></html>
