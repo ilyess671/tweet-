@@ -131,7 +131,11 @@ def reperes(stt, v):
     r['A'], r['B'], r['C'] = W[ia]['start'], W[ib]['start'], W[ic]['start']
     r['avant_A'] = W[ia - 1]['end']
     # fin de la phrase C puis « À toi de jouer… »
-    icf = find(lambda i: W[i]['text'].rstrip().endswith(('.', '!', '?')), ic + 1) or ic + 1
+    ij = find(lambda i: N[i] == 'a' and i + 1 < len(W) and N[i + 1] == 'toi', ic + 1)  # « À toi de jouer »
+    if ij is not None:
+        icf = ij - 1
+    else:
+        icf = find(lambda i: W[i]['text'].rstrip().endswith(('.', '!', '?')), ic + 1) or ic + 1
     r['C_fin'] = W[icf]['end']
     r['jouer'] = W[min(icf + 1, len(W) - 1)]['start']
     ireg = find(lambda i: N[i] == 'regarde', icf + 1)
@@ -152,7 +156,32 @@ def reperes(stt, v):
     # phrase de commentaire entre le titre et A : le surlignage se déclenche au milieu
     r['surlignage'] = (r['titre_fin'] + r['avant_A']) / 2
     r.update({k: float(x) for k, x in force.items()})
-    return r
+    # blancs ajoutés dans la voix (ajustements.silences) : tous les repères après sont décalés
+    S = silences(v)
+    sh = lambda t: t + sum(d for ts, d in S if t >= ts)
+    return {k: ([sh(x) for x in val] if isinstance(val, list) else sh(val)) for k, val in r.items()}
+
+
+def silences(v):
+    """[[temps dans la voix d'origine, durée du blanc], ...] triés."""
+    return sorted([float(a), float(b)] for a, b in ((v.get('ajustements') or {}).get('silences') or []))
+
+
+def voix_avec_silences(voix, v, work):
+    S = silences(v)
+    if not S:
+        return voix
+    out = work / 'voix_silences.wav'
+    parts, flt, prev = [], [], 0.0
+    for k, (ts, d) in enumerate(S):
+        flt.append(f"[0:a]atrim={prev}:{ts},asetpts=PTS-STARTPTS[p{k}];aevalsrc=0:d={d}:s=44100[z{k}];")
+        parts += [f'[p{k}]', f'[z{k}]']; prev = ts
+    flt.append(f"[0:a]atrim={prev},asetpts=PTS-STARTPTS[p{len(S)}];")
+    parts.append(f'[p{len(S)}]')
+    run(['ffmpeg', '-v', 'error', '-y', '-i', str(voix), '-filter_complex',
+         ''.join(flt) + ''.join(parts) + f'concat=n={len(parts)}:v=0:a=1,aformat=channel_layouts=mono:sample_rates=44100[a]',
+         '-map', '[a]', str(out)])
+    return out
 
 
 # ---------------------------------------------------------------- minutage
@@ -172,7 +201,7 @@ def minutage(v, R, reg, clip_len):
     T['toQuiz'][1] = T['toQuiz'][0] + 0.6
     T['headQuiz'] = T['toQuiz'][0]
     T['rows'] = [R[k] + O1 - 0.08 for k in 'ABC']
-    T['rowsEnd'] = R['C_fin'] + O1
+    T['rowsEnd'] = max(R['C_fin'], R['jouer'] - 0.25) + O1
     T['headPlay'] = R['jouer'] + O1 - 0.1
     T['pillStars'] = R['fin_question'] + O1 + 0.1
     st = [T['pillStars'] + 0.3]
@@ -246,6 +275,7 @@ def construire(v, reg, force=False, apercu=False, seulement_reperes=False):
     print(f'#{num:02d} gameplay={clip.name} voix={voix.name}')
 
     R = reperes(transcrire(voix, work), v)
+    voix = voix_avec_silences(voix, v, work)   # la voix utilisée au mixage (avec les blancs ajoutés)
     if seulement_reperes:
         print(json.dumps({k: (round(x, 2) if isinstance(x, float) else [round(y, 2) for y in x]) for k, x in R.items()}, ensure_ascii=False, indent=1))
         return None

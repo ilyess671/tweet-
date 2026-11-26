@@ -97,6 +97,7 @@ videos:
       B: {image: reponse-04-B.jpg}   # les chats de Tom & Jerry
       C: {image: reponse-04-C.jpg}   # Popeye
     bonne_reponse: B, C         # deux bonnes réponses
+    suite_ralenti: 0.5          # extrait de 9,8 s : la suite au ralenti couvre la fin de la voix
     script: |                   # proposition ; l'utilisateur ajoute un son de mème après « B » et « C »
       [mysterious] Dans cette situation…
       Jason se fait renverser à vélo par une voiture. [sarcastic] Vol plané, roulade, face contre le bitume… la grande classe.
@@ -105,6 +106,7 @@ videos:
       C : (son de mème)
       [excited] À toi de jouer ! T'as cinq secondes.
       [whispers] Regarde bien…
-      [laughs] Réponse B et C ! Jason se relève, vénère comme Popeye, prêt à démarrer toutes les voitures qui passent.
+      Réponse B et C. Jason se relève comme un Cotorep qui a pas été modélisé depuis 13 ans. Wesh, Rockstar, vous abusez là.
       [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
-    ajustements: {}
+    ajustements:
+      silences: [[11.30, 1.8], [12.06, 1.8]]   # blancs après « B » et après « C » pour laisser voir les mèmes
