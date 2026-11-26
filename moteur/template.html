@@ -32,13 +32,11 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#f3eff4;font-fam
 .row .tx{position:absolute;left:126px;right:100px;top:0;bottom:0;display:flex;align-items:center;font:800 40px/1.08 'Inter Tight';letter-spacing:-1px;color:#16121f}
 .row .ck{position:absolute;right:24px;top:28px;width:64px;height:64px;border-radius:50%;background:#fff;display:grid;place-items:center;color:#16b85c;font:900 40px 'Inter Tight'}
 /* réponses en tuiles (quand une réponse est une image) */
-.tile{position:absolute;top:136px;width:293px;height:380px;border-radius:30px;background:#f7f5fa;border:3px solid #ece7f2;overflow:hidden}
+.tile{position:absolute;border-radius:30px;background:#f7f5fa;border:3px solid #ece7f2;overflow:hidden}
 .tile .bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(18px) saturate(1.2);transform:scale(1.2);opacity:.85}
 .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .tile .fill{position:absolute;left:0;right:0;bottom:0;height:0;background:rgba(22,184,92,.38)}
-.tile.txt .fill{background:linear-gradient(180deg,#34dd86,#16b85c)}
 .tile .sq{position:absolute;left:14px;top:14px;width:72px;height:72px;border-radius:21px;font-size:44px;box-shadow:0 6px 16px rgba(0,0,0,.25);z-index:2}
-.tile .tx{position:absolute;left:18px;right:18px;top:90px;bottom:18px;display:flex;align-items:center;justify-content:center;text-align:center;font:900 46px/1.02 'Inter Tight';letter-spacing:-1.5px;color:#16121f;z-index:1}
 .tile .cap{position:absolute;left:10px;right:10px;bottom:10px;padding:6px 10px;border-radius:14px;background:rgba(255,255,255,.88);text-align:center;font:800 26px/1.1 'Inter Tight';color:#16121f;z-index:2}
 .tile .ck{position:absolute;right:14px;top:14px;width:64px;height:64px;border-radius:50%;background:#fff;display:grid;place-items:center;color:#16b85c;font:900 40px 'Inter Tight';z-index:3;box-shadow:0 6px 16px rgba(0,0,0,.25)}
 .a{background:linear-gradient(160deg,#ff7ab0,#ff2d55)}.b{background:linear-gradient(160deg,#6fd0ff,#2a7bff)}.c{background:linear-gradient(160deg,#ffc15a,#ff8a00)}
@@ -92,7 +90,7 @@ const HEADS=[
  [T.headQuiz,[["A,",""],["B",""],["ou",""],["C ?","pk"]]],
  [T.headPlay,[["À",""],["toi",""],["de",""],["jouer","pk"]]],
  [T.headWatch,[["Regarde",""],["bien…","pk"]]],
- [T.reveal,[["Réponse",""],[L[CFG.good]+" !","gr"]]],
+ [T.reveal,[["Réponse",""],[[].concat(CFG.good).map(g=>L[g]).join(" et ")+" !","gr"]]],
  [T.outro[0],[["Et",""],["toi,",""],["t'avais",""],["trouvé ?","pk"]]],
 ];
 $('head').innerHTML=HEADS.map((h,i)=>`<div class="h" id="h${i}">${h[1].map(w=>`<span class="${w[1]}">${w[0]}</span>`).join('')}</div>`).join('');
@@ -100,10 +98,17 @@ $('head').innerHTML=HEADS.map((h,i)=>`<div class="h" id="h${i}">${h[1].map(w=>`<
 $('logoimg').src=window.CONFIG.logo;
 $('kick').innerHTML='<div class="sq a">?</div>Code de GTA VI #'+CFG.num;
 const ANS=CFG.answers.map(a=>typeof a==='string'?{t:a}:a);
-const TILES=ANS.some(a=>a.img);
-$('rows').innerHTML=ANS.map((a,i)=>TILES
-  ?`<div class="tile ${a.img?'':'txt'}" id="r${i}" style="left:${24+i*309}px">${a.img?`<div class="bg" style="background-image:url('${a.img}')"></div><img src="${a.img}">`:''}<div class="fill" id="f${i}"></div><div class="sq ${LC[i]}">${L[i]}</div>${a.img?(a.t?`<div class="cap" id="x${i}">${a.t}</div>`:`<div id="x${i}"></div>`):`<div class="tx" id="x${i}">${a.t}</div>`}<div class="ck" id="ck${i}" style="opacity:0">✓</div></div>`
-  :`<div class="row" id="r${i}" style="top:${136+i*132}px"><div class="fill" id="f${i}"></div><div class="sq ${LC[i]}">${L[i]}</div><div class="tx" id="x${i}">${a.t}</div><div class="ck" id="ck${i}" style="opacity:0">✓</div></div>`).join('');
+const GOOD=[].concat(CFG.good);              // une ou plusieurs bonnes réponses
+/* mise en page : réponses texte en lignes (en haut), réponses image en tuiles côte à côte (dessous) */
+const nTxt=ANS.filter(a=>!a.img).length, nImg=ANS.length-nTxt;
+const tileTop=136+nTxt*132+(nTxt?4:0), tileW=nImg?(912-(nImg-1)*16)/nImg:0, tileH=nImg===3?380:(nTxt>=2?240:300);
+const QH=nImg?tileTop+tileH+28:548;          // hauteur de la carte quiz
+const CEN=[];let kT=0,kI=0;
+$('rows').innerHTML=ANS.map((a,i)=>{
+  if(a.img){const left=24+(kI++)*(tileW+16);CEN[i]=[60+left+tileW/2,900+tileTop+tileH/2];
+    return `<div class="tile" id="r${i}" style="left:${left}px;top:${tileTop}px;width:${tileW}px;height:${tileH}px"><div class="bg" style="background-image:url('${a.img}')"></div><img src="${a.img}"><div class="fill" id="f${i}"></div><div class="sq ${LC[i]}">${L[i]}</div>${a.t?`<div class="cap" id="x${i}">${a.t}</div>`:`<div id="x${i}"></div>`}<div class="ck" id="ck${i}" style="opacity:0">✓</div></div>`;}
+  const top=136+(kT++)*132;CEN[i]=[60+24+912-56,900+top+60];
+  return `<div class="row" id="r${i}" style="top:${top}px"><div class="fill" id="f${i}"></div><div class="sq ${LC[i]}">${L[i]}</div><div class="tx" id="x${i}">${a.t}</div><div class="ck" id="ck${i}" style="opacity:0">✓</div></div>`;}).join('');
 $('ticks').innerHTML=T.stars.map((_,i)=>`<div class="tt" id="tk${i}">${i%2?'tac':'tic'}</div>`).join('');
 let sp='';for(let i=0;i<26;i++)sp+=`<div class="sp" id="sp${i}" style="background:${['#ff2d55','#ffc400','#16b85c','#2a7bff','#a46bff'][i%5]}"></div>`;$('spk').innerHTML=sp;
 const star=i=>`<svg id="s${i}" viewBox="0 0 24 24"><path d="M12 1.8l3 6.5 7 .8-5.2 4.8 1.4 7-6.2-3.6-6.2 3.6 1.4-7L1 9.1l7-.8z" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
@@ -114,7 +119,7 @@ const G1={x:90,y:350,w:900,h:506,r:40,c:[22,20,28,1]};
 const BTN={x:270,y:880,w:540,h:140,r:70,c:[255,45,85,1]};
 const SUB={x:270,y:880,w:540,h:140,r:70,c:[24,20,32,1]};
 const PT={x:60,y:900,w:960,h:320,r:44};
-const PQ={x:60,y:900,w:960,h:548,r:44};
+const PQ={x:60,y:900,w:960,h:QH,r:44};
 const mixS=(A,B,k)=>{const o={};for(const p of ['x','y','w','h','r'])o[p]=lerp(A[p],B[p],k);if(A.c)o.c=A.c.map((v,i)=>lerp(v,B.c[i],k));return o};
 function seq(t,segs,first){let st=first,tilt=0,bump=0;for(const [a,b,A,B] of segs){if(t>=b)st=B;else if(t>=a){const k=eio(prog(t,a,b));st=mixS(A,B,k);tilt=Math.sin(Math.PI*k);break}}
   for(const [a,b] of segs){const p=prog(t,b,b+.35);if(p>0&&p<1)bump=Math.sin(Math.PI*p)*0.025*(1-p)}return {st,tilt,bump}}
@@ -169,12 +174,12 @@ window.render=function(t){
   [...pt.children].forEach((s,i)=>{const w0=T.wordT[i]-0.06;const q=prog(t,w0,w0+0.4);s.style.opacity=eoCubic(q);s.style.filter=`blur(${(1-eoCubic(q))*14}px)`;s.style.transform=`translateY(${(1-eoBack(q))*30}px)`;
     if(s.classList.contains('hl')){const k=+s.dataset.k;s.style.backgroundSize=`${eoCubic(prog(t,T.hl+k*0.3,T.hl+0.4+k*0.3))*100}% 100%`;}});
   const rev=prog(t,T.reveal+0.1,T.reveal+0.7);
-  for(let i=0;i<3;i++){const r=$('r'+i);const q=prog(t,T.rows[i],T.rows[i]+.5);const good=i===CFG.good;
+  for(let i=0;i<3;i++){const r=$('r'+i);const q=prog(t,T.rows[i],T.rows[i]+.5);const good=GOOD.includes(i);
     const act=t>=T.rows[i]&&t<(i<2?T.rows[i+1]:T.rowsEnd);r.style.borderColor=act?'#ff7aa0':'#ece7f2';r.style.background=act?'#fff4f7':'';
     r.style.opacity=eoCubic(q)*(good?1:lerp(1,.35,rev));r.style.filter=`blur(${(1-eoCubic(q))*12}px)`;
     r.style.transform=`translateY(${(1-eoBack(q))*40}px) scale(${(good?1+0.03*Math.sin(Math.PI*prog(t,T.reveal+.4,T.reveal+.75)):1)*(act?1.015:1)})`;
-    if(TILES&&!good)r.style.filter+=` grayscale(${rev})`;
-    if(good){if(TILES){$('f'+i).style.height=(eio(rev)*100)+'%';if(!ANS[i].img)$('x'+i).style.color=rev>.55?'#fff':'#16121f';r.style.boxShadow=rev>0?`0 0 ${60*rev}px ${12*rev}px rgba(43,214,123,.55)`:'none';}
+    if(ANS[i].img&&!good)r.style.filter+=` grayscale(${rev})`;
+    if(good){if(ANS[i].img){$('f'+i).style.height=(eio(rev)*100)+'%';r.style.boxShadow=rev>0?`0 0 ${60*rev}px ${12*rev}px rgba(43,214,123,.55)`:'none';}
       else{$('f'+i).style.width=(eio(rev)*100)+'%';$('x'+i).style.color=rev>.55?'#fff':'#16121f';}
       if(rev>0)r.style.borderColor='#16b85c';
       const ck=prog(t,T.reveal+0.45,T.reveal+0.8);$('ck'+i).style.transform=`scale(${eoBack(ck)}) rotate(${lerp(-60,0,eoCubic(ck))}deg)`;$('ck'+i).style.opacity=ck>0?1:0;}}
@@ -197,7 +202,7 @@ window.render=function(t){
 
   /* ----- sparkles ----- */
   for(let i=0;i<26;i++){const e=$('sp'+i);const k=t-(T.reveal+0.45);if(k<0||k>.9){e.style.opacity=0;continue}
-    const a=i/26*Math.PI*2,d=110+eoCubic(k/.9)*240;const cx=TILES?60+24+CFG.good*309+146:60+24+912-56,cy=TILES?900+136+190:900+136+CFG.good*132+60;
+    const a=i/26*Math.PI*2,d=110+eoCubic(k/.9)*240;const [cx,cy]=CEN[GOOD[i%GOOD.length]];
     e.style.left=(cx+Math.cos(a)*d*1.5-6)+'px';e.style.top=(cy+Math.sin(a)*d-17)+'px';e.style.opacity=1-k/.9;e.style.transform=`rotate(${a*180/Math.PI+90}deg) scaleY(${1-k})`;}
 
   /* ----- logo ----- */

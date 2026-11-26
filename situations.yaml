@@ -92,19 +92,19 @@ videos:
     revelation_a: 5.4           # il se relève et distribue des coups de poing dans le vide
     situation: "Jason se fait renverser à vélo par une voiture."
     surligne: [renverser, à, vélo]
-    reponses:                   # réponses en image → affichage en 3 tuiles
+    reponses:                   # A en ligne classique, B et C en tuiles d'image (sans texte)
       A: "TOUT VA BIEN !!!"
       B: {image: reponse-04-B.jpg}   # les chats de Tom & Jerry
       C: {image: reponse-04-C.jpg}   # Popeye
-    bonne_reponse: C            # à confirmer
-    script: |                   # proposition, en attente de validation
+    bonne_reponse: B, C         # deux bonnes réponses
+    script: |                   # proposition ; l'utilisateur ajoute un son de mème après « B » et « C »
       [mysterious] Dans cette situation…
       Jason se fait renverser à vélo par une voiture. [sarcastic] Vol plané, roulade, face contre le bitume… la grande classe.
-      A : tout va bien, il remonte sur son vélo comme si de rien n'était.
-      B : il repart en mode gang des chats de Tom et Jerry.
-      C : il passe en mode Popeye.
+      A : tout va bien !
+      B : (son de mème)
+      C : (son de mème)
       [excited] À toi de jouer ! T'as cinq secondes.
       [whispers] Regarde bien…
-      [laughs] Réponse C ! Jason se relève et distribue des patates dans le vide à toutes les voitures qui passent. Popeye, sors de ce corps !
+      [laughs] Réponse B et C ! Jason se relève, vénère comme Popeye, prêt à démarrer toutes les voitures qui passent.
       [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
     ajustements: {}

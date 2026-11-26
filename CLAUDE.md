@@ -31,8 +31,10 @@ intonations ElevenLabs v3 entre crochets (`[mysterious]`, `[whispers]`, `[laughs
 
 ## Réponses en image
 Une réponse peut être une image (mème…) : `B: {image: reponse-NN-B.jpg}` (fichier dans `entrees/`,
-légende facultative avec `texte:`). Dès qu'une réponse est une image, les 3 réponses s'affichent en
-3 tuiles côte à côte. La voix doit quand même dire « A : … », « B : … », « C : … » (décrire l'image).
+légende facultative avec `texte:`). Les réponses texte gardent la ligne classique (en haut) et les
+réponses image s'affichent en tuiles côte à côte dessous. La voix doit quand même dire la lettre
+(« B : … ») ; l'utilisateur peut mettre un son de mème à la place de la description.
+Plusieurs bonnes réponses : `bonne_reponse: B, C` (toutes passent au vert, titre « Réponse B et C ! »).
 
 ## Le script de la voix doit contenir (le moteur s'y cale automatiquement)
 - « Dans cette situation… » au début (→ la pause/flash) ;

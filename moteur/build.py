@@ -261,7 +261,8 @@ def construire(v, reg, force=False, apercu=False, seulement_reperes=False):
             return {'t': x.get('texte', ''), 'img': f'file://{img}'}
         return str(x)
     cfg = {'num': num, 'label': v['titre_gameplay'], 'title': titre_mots(v),
-           'answers': [reponse(rep[k]) for k in lettres], 'good': lettres.index(str(v['bonne_reponse']).strip().upper())}
+           'answers': [reponse(rep[k]) for k in lettres],
+           'good': [lettres.index(x) for x in re.findall(r'[ABC]', str(v['bonne_reponse']).upper())]}  # « B » ou « B, C »
     conf = {'cfg': cfg, 'T': T, 'duree': M['duree'], 'logo': f"file://{ROOT / 'assets' / 'logo.png'}"}
 
     # images du gameplay (intro, image figée, suite)
