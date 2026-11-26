@@ -40,8 +40,7 @@ videos:
   - numero: 2
     titre_gameplay: "Vol de voiture"
     pause_a: 2.0
-    suite_depuis: 22.0          # on saute le moment où Jason reste planté devant la portière
-    revelation_a: 26.0          # la voiture repart sans lui
+    revelation_a: 5.0           # la conductrice hurle (« Argh ! Non, non, non ! »)
     situation: "Jason essaie de voler une voiture."
     surligne: [voler, une, voiture]
     reponses:
@@ -57,6 +56,6 @@ videos:
       C : ce tocard de Jason a encore raté son vol.
       [excited] À toi de jouer ! T'as cinq secondes.
       [whispers] Regarde bien…
-      [laughs] Réponse C ! [mocking] Le proprio était encore dedans… et il est reparti tranquille avec sa voiture. Jason, même les bagnoles te mettent un vent.
+      [laughs] Réponse C ! Une folle hystérique lui crie dessus comme un petit con. Jason perd tous ses moyens, lol.
       [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
     ajustements: {}

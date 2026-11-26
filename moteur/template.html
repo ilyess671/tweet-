@@ -88,6 +88,7 @@ const HEADS=[
 $('head').innerHTML=HEADS.map((h,i)=>`<div class="h" id="h${i}">${h[1].map(w=>`<span class="${w[1]}">${w[0]}</span>`).join('')}</div>`).join('');
 {let k=0;$('ptitle').innerHTML=CFG.title.map(w=>`<span class="${w[1]}"${w[1]==='hl'?` data-k="${k++}"`:''}>${w[0]}</span>`).join('');}
 $('logoimg').src=window.CONFIG.logo;
+$('kick').innerHTML='<div class="sq a">?</div>Code de GTA VI #'+CFG.num;
 $('rows').innerHTML=CFG.answers.map((a,i)=>`<div class="row" id="r${i}" style="top:${136+i*132}px"><div class="fill" id="f${i}"></div><div class="sq ${LC[i]}">${L[i]}</div><div class="tx" id="x${i}">${a}</div><div class="ck" id="ck${i}" style="opacity:0">✓</div></div>`).join('');
 $('ticks').innerHTML=T.stars.map((_,i)=>`<div class="tt" id="tk${i}">${i%2?'tac':'tic'}</div>`).join('');
 let sp='';for(let i=0;i<26;i++)sp+=`<div class="sp" id="sp${i}" style="background:${['#ff2d55','#ffc400','#16b85c','#2a7bff','#a46bff'][i%5]}"></div>`;$('spk').innerHTML=sp;
