@@ -14,7 +14,10 @@ extraits de gameplay GTA VI de l'utilisateur. Le style est **validé** : ne pas 
    (NN = numéro de la vidéo, sur 2 chiffres).
 2. Corriger l'orthographe de ses textes **sans changer son ton ni son argot** (il a choisi de garder
    « gonzesse », par exemple). Garder les textes courts pour qu'ils se lisent à l'écran.
-3. Ajouter un bloc dans `situations.yaml` (copier le modèle de la vidéo 1).
+3. Ajouter un bloc dans `situations.yaml` (copier le modèle de la vidéo 1). Toujours regarder
+   l'extrait (planche d'images + sous-titres du jeu) pour vérifier la bonne réponse et le moment où elle
+   se voit (`revelation_a`). Si la réponse arrive longtemps après la pause, utiliser `suite_depuis`
+   pour que « la suite » reprenne juste avant (sinon la suite est trop longue).
 4. `python3 moteur/build.py NN --reperes` : vérifier que tous les repères de la voix sont trouvés.
 5. `python3 moteur/build.py NN --apercu` : regarder `sorties/apercus/apercu-NN.png` (8 images clés).
 6. `python3 moteur/build.py NN` (≈ 6 min pour 50 s ; lancer en arrière-plan pour plusieurs vidéos).

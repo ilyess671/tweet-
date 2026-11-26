@@ -17,6 +17,7 @@ videos:
     titre_gameplay: "Braquage à l'épicerie"    # étiquette au-dessus du gameplay
     pause_a: 8.0                                # seconde de l'extrait où on met pause
     revelation_a: 10.25                         # (optionnel) seconde de l'extrait où la réponse se voit
+    # suite_depuis: 8.0                          # (optionnel) seconde où « la suite » reprend (défaut : pause_a)
     situation: "Jason tente un braquage discret à l'épicerie."
     surligne: [braquage, discret]               # mots surlignés en jaune
     reponses:
@@ -35,3 +36,27 @@ videos:
       [laughs] Réponse B ! Désarmé par une gonzesse… [mocking] Jason, t'as braqué l'épicerie ou c'est l'épicerie qui t'a braqué ?
       [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
     ajustements: {}                             # corrections ponctuelles (voir CLAUDE.md)
+
+  - numero: 2
+    titre_gameplay: "Vol de voiture"
+    pause_a: 2.0
+    suite_depuis: 22.0          # on saute le moment où Jason reste planté devant la portière
+    revelation_a: 26.0          # la voiture repart sans lui
+    situation: "Jason essaie de voler une voiture."
+    surligne: [voler, une, voiture]
+    reponses:
+      A: "Il sort son arme et braque la voiture"
+      B: "La police se trouvait juste derrière lui"
+      C: "Ce tocard de Jason a encore raté son vol"
+    bonne_reponse: C
+    script: |                   # proposition, en attente de validation
+      [mysterious] Dans cette situation…
+      Jason essaie de voler une voiture. [sarcastic] Une voiture de luxe, en plein jour, devant tout le monde… le plan parfait.
+      A : il sort son arme et braque la voiture.
+      B : la police se trouvait juste derrière lui.
+      C : ce tocard de Jason a encore raté son vol.
+      [excited] À toi de jouer ! T'as cinq secondes.
+      [whispers] Regarde bien…
+      [laughs] Réponse C ! [mocking] Le proprio était encore dedans… et il est reparti tranquille avec sa voiture. Jason, même les bagnoles te mettent un vent.
+      [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
+    ajustements: {}
