@@ -89,7 +89,8 @@ videos:
   - numero: 4
     titre_gameplay: "Accident à vélo"
     pause_a: 4.0                # Jason est au sol, juste avant qu'il se relève
-    revelation_a: 5.4           # il se relève et distribue des coups de poing dans le vide
+    revelation_a: 4.6           # il se relève (les coups de poing tombent sur « B et C »)
+    suite_depuis: 0.0           # la suite rejoue l'accident depuis le début, en vitesse normale
     situation: "Jason se fait renverser à vélo par une voiture."
     surligne: [renverser, à, vélo]
     reponses:                   # A en ligne classique, B et C en tuiles d'image (sans texte)
@@ -97,7 +98,6 @@ videos:
       B: {image: reponse-04-B.jpg}   # les chats de Tom & Jerry
       C: {image: reponse-04-C.jpg}   # Popeye
     bonne_reponse: B, C         # deux bonnes réponses
-    suite_ralenti: 0.5          # extrait de 9,8 s : la suite au ralenti couvre la fin de la voix
     script: |                   # proposition ; l'utilisateur ajoute un son de mème après « B » et « C »
       [mysterious] Dans cette situation…
       Jason se fait renverser à vélo par une voiture. [sarcastic] Vol plané, roulade, face contre le bitume… la grande classe.
