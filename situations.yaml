@@ -49,7 +49,7 @@ videos:
       B: "La police se trouvait juste derrière lui"
       C: "Ce tocard de Jason a encore raté son vol"
     bonne_reponse: C
-    script: |                   # proposition, en attente de validation
+    script: |                   # validé par l'utilisateur
       [mysterious] Dans cette situation…
       Jason essaie de voler une voiture. [sarcastic] Une voiture de luxe, en plein jour, devant tout le monde… le plan parfait.
       A : il sort son arme et braque la voiture.
