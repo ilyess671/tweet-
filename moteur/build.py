@@ -252,8 +252,16 @@ def construire(v, reg, force=False, apercu=False, seulement_reperes=False):
     T, M = minutage(v, R, reg, duree(clip))
     lettres = 'ABC'
     rep = v['reponses']
+
+    def reponse(x):  # texte simple, ou {image: fichier dans entrees/, texte: légende facultative}
+        if isinstance(x, dict) and x.get('image'):
+            img = ENTREES / x['image']
+            if not img.exists():
+                raise FileNotFoundError(f'Image de réponse introuvable : {img}')
+            return {'t': x.get('texte', ''), 'img': f'file://{img}'}
+        return str(x)
     cfg = {'num': num, 'label': v['titre_gameplay'], 'title': titre_mots(v),
-           'answers': [rep[k] for k in lettres], 'good': lettres.index(str(v['bonne_reponse']).strip().upper())}
+           'answers': [reponse(rep[k]) for k in lettres], 'good': lettres.index(str(v['bonne_reponse']).strip().upper())}
     conf = {'cfg': cfg, 'T': T, 'duree': M['duree'], 'logo': f"file://{ROOT / 'assets' / 'logo.png'}"}
 
     # images du gameplay (intro, image figée, suite)

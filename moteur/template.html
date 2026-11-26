@@ -31,6 +31,16 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#f3eff4;font-fam
 .row .sq{position:absolute;left:18px;top:18px;width:84px;height:84px;border-radius:24px;font-size:50px}
 .row .tx{position:absolute;left:126px;right:100px;top:0;bottom:0;display:flex;align-items:center;font:800 40px/1.08 'Inter Tight';letter-spacing:-1px;color:#16121f}
 .row .ck{position:absolute;right:24px;top:28px;width:64px;height:64px;border-radius:50%;background:#fff;display:grid;place-items:center;color:#16b85c;font:900 40px 'Inter Tight'}
+/* réponses en tuiles (quand une réponse est une image) */
+.tile{position:absolute;top:136px;width:293px;height:380px;border-radius:30px;background:#f7f5fa;border:3px solid #ece7f2;overflow:hidden}
+.tile .bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(18px) saturate(1.2);transform:scale(1.2);opacity:.85}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.tile .fill{position:absolute;left:0;right:0;bottom:0;height:0;background:rgba(22,184,92,.38)}
+.tile.txt .fill{background:linear-gradient(180deg,#34dd86,#16b85c)}
+.tile .sq{position:absolute;left:14px;top:14px;width:72px;height:72px;border-radius:21px;font-size:44px;box-shadow:0 6px 16px rgba(0,0,0,.25);z-index:2}
+.tile .tx{position:absolute;left:18px;right:18px;top:90px;bottom:18px;display:flex;align-items:center;justify-content:center;text-align:center;font:900 46px/1.02 'Inter Tight';letter-spacing:-1.5px;color:#16121f;z-index:1}
+.tile .cap{position:absolute;left:10px;right:10px;bottom:10px;padding:6px 10px;border-radius:14px;background:rgba(255,255,255,.88);text-align:center;font:800 26px/1.1 'Inter Tight';color:#16121f;z-index:2}
+.tile .ck{position:absolute;right:14px;top:14px;width:64px;height:64px;border-radius:50%;background:#fff;display:grid;place-items:center;color:#16b85c;font:900 40px 'Inter Tight';z-index:3;box-shadow:0 6px 16px rgba(0,0,0,.25)}
 .a{background:linear-gradient(160deg,#ff7ab0,#ff2d55)}.b{background:linear-gradient(160deg,#6fd0ff,#2a7bff)}.c{background:linear-gradient(160deg,#ffc15a,#ff8a00)}
 .after{position:absolute;left:0;right:0;top:1060px;text-align:center;font:600 36px 'Inter Tight';color:#8d8399;z-index:4}
 #stars svg{width:46px;height:46px}
@@ -89,7 +99,11 @@ $('head').innerHTML=HEADS.map((h,i)=>`<div class="h" id="h${i}">${h[1].map(w=>`<
 {let k=0;$('ptitle').innerHTML=CFG.title.map(w=>`<span class="${w[1]}"${w[1]==='hl'?` data-k="${k++}"`:''}>${w[0]}</span>`).join('');}
 $('logoimg').src=window.CONFIG.logo;
 $('kick').innerHTML='<div class="sq a">?</div>Code de GTA VI #'+CFG.num;
-$('rows').innerHTML=CFG.answers.map((a,i)=>`<div class="row" id="r${i}" style="top:${136+i*132}px"><div class="fill" id="f${i}"></div><div class="sq ${LC[i]}">${L[i]}</div><div class="tx" id="x${i}">${a}</div><div class="ck" id="ck${i}" style="opacity:0">✓</div></div>`).join('');
+const ANS=CFG.answers.map(a=>typeof a==='string'?{t:a}:a);
+const TILES=ANS.some(a=>a.img);
+$('rows').innerHTML=ANS.map((a,i)=>TILES
+  ?`<div class="tile ${a.img?'':'txt'}" id="r${i}" style="left:${24+i*309}px">${a.img?`<div class="bg" style="background-image:url('${a.img}')"></div><img src="${a.img}">`:''}<div class="fill" id="f${i}"></div><div class="sq ${LC[i]}">${L[i]}</div>${a.img?(a.t?`<div class="cap" id="x${i}">${a.t}</div>`:`<div id="x${i}"></div>`):`<div class="tx" id="x${i}">${a.t}</div>`}<div class="ck" id="ck${i}" style="opacity:0">✓</div></div>`
+  :`<div class="row" id="r${i}" style="top:${136+i*132}px"><div class="fill" id="f${i}"></div><div class="sq ${LC[i]}">${L[i]}</div><div class="tx" id="x${i}">${a.t}</div><div class="ck" id="ck${i}" style="opacity:0">✓</div></div>`).join('');
 $('ticks').innerHTML=T.stars.map((_,i)=>`<div class="tt" id="tk${i}">${i%2?'tac':'tic'}</div>`).join('');
 let sp='';for(let i=0;i<26;i++)sp+=`<div class="sp" id="sp${i}" style="background:${['#ff2d55','#ffc400','#16b85c','#2a7bff','#a46bff'][i%5]}"></div>`;$('spk').innerHTML=sp;
 const star=i=>`<svg id="s${i}" viewBox="0 0 24 24"><path d="M12 1.8l3 6.5 7 .8-5.2 4.8 1.4 7-6.2-3.6-6.2 3.6 1.4-7L1 9.1l7-.8z" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
@@ -159,7 +173,10 @@ window.render=function(t){
     const act=t>=T.rows[i]&&t<(i<2?T.rows[i+1]:T.rowsEnd);r.style.borderColor=act?'#ff7aa0':'#ece7f2';r.style.background=act?'#fff4f7':'';
     r.style.opacity=eoCubic(q)*(good?1:lerp(1,.35,rev));r.style.filter=`blur(${(1-eoCubic(q))*12}px)`;
     r.style.transform=`translateY(${(1-eoBack(q))*40}px) scale(${(good?1+0.03*Math.sin(Math.PI*prog(t,T.reveal+.4,T.reveal+.75)):1)*(act?1.015:1)})`;
-    if(good){$('f'+i).style.width=(eio(rev)*100)+'%';$('x'+i).style.color=rev>.55?'#fff':'#16121f';if(rev>0)r.style.borderColor='#16b85c';
+    if(TILES&&!good)r.style.filter+=` grayscale(${rev})`;
+    if(good){if(TILES){$('f'+i).style.height=(eio(rev)*100)+'%';if(!ANS[i].img)$('x'+i).style.color=rev>.55?'#fff':'#16121f';r.style.boxShadow=rev>0?`0 0 ${60*rev}px ${12*rev}px rgba(43,214,123,.55)`:'none';}
+      else{$('f'+i).style.width=(eio(rev)*100)+'%';$('x'+i).style.color=rev>.55?'#fff':'#16121f';}
+      if(rev>0)r.style.borderColor='#16b85c';
       const ck=prog(t,T.reveal+0.45,T.reveal+0.8);$('ck'+i).style.transform=`scale(${eoBack(ck)}) rotate(${lerp(-60,0,eoCubic(ck))}deg)`;$('ck'+i).style.opacity=ck>0?1:0;}}
 
   /* ----- pill on top edge of gameplay ----- */
@@ -180,7 +197,7 @@ window.render=function(t){
 
   /* ----- sparkles ----- */
   for(let i=0;i<26;i++){const e=$('sp'+i);const k=t-(T.reveal+0.45);if(k<0||k>.9){e.style.opacity=0;continue}
-    const a=i/26*Math.PI*2,d=110+eoCubic(k/.9)*240;const cx=60+24+912-56,cy=900+136+CFG.good*132+60;
+    const a=i/26*Math.PI*2,d=110+eoCubic(k/.9)*240;const cx=TILES?60+24+CFG.good*309+146:60+24+912-56,cy=TILES?900+136+190:900+136+CFG.good*132+60;
     e.style.left=(cx+Math.cos(a)*d*1.5-6)+'px';e.style.top=(cy+Math.sin(a)*d-17)+'px';e.style.opacity=1-k/.9;e.style.transform=`rotate(${a*180/Math.PI+90}deg) scaleY(${1-k})`;}
 
   /* ----- logo ----- */

@@ -29,6 +29,11 @@ Si l'utilisateur donne seulement une idée en vrac, écrire le script drôle et 
 intonations ElevenLabs v3 entre crochets (`[mysterious]`, `[whispers]`, `[laughs]`, `[sarcastic]`,
 `[excited]`, `[warm]`…) et le faire valider avant qu'il génère la voix.
 
+## Réponses en image
+Une réponse peut être une image (mème…) : `B: {image: reponse-NN-B.jpg}` (fichier dans `entrees/`,
+légende facultative avec `texte:`). Dès qu'une réponse est une image, les 3 réponses s'affichent en
+3 tuiles côte à côte. La voix doit quand même dire « A : … », « B : … », « C : … » (décrire l'image).
+
 ## Le script de la voix doit contenir (le moteur s'y cale automatiquement)
 - « Dans cette situation… » au début (→ la pause/flash) ;
 - la situation, mot pour mot comme le champ `situation` (→ les mots du titre pop dessus) ;
