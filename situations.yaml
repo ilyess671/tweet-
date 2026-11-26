@@ -18,6 +18,7 @@ videos:
     pause_a: 8.0                                # seconde de l'extrait où on met pause
     revelation_a: 10.25                         # (optionnel) seconde de l'extrait où la réponse se voit
     # suite_depuis: 8.0                          # (optionnel) seconde où « la suite » reprend (défaut : pause_a)
+    # suite_ralenti: 0.5                         # (optionnel) la suite est jouée au ralenti (×0,5) si l'extrait est court
     situation: "Jason tente un braquage discret à l'épicerie."
     surligne: [braquage, discret]               # mots surlignés en jaune
     reponses:
@@ -57,5 +58,29 @@ videos:
       [excited] À toi de jouer ! T'as cinq secondes.
       [whispers] Regarde bien…
       [laughs] Réponse C ! Une folle hystérique lui crie dessus comme un petit con. Jason perd tous ses moyens, lol.
+      [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
+    ajustements: {}
+
+  - numero: 3
+    titre_gameplay: "Balade à vélo"
+    pause_a: 2.0
+    revelation_a: 2.7           # le coup de pied dans le cycliste
+    suite_ralenti: 0.5          # extrait de 5,9 s : la suite passe au ralenti
+    situation: "Le bon vieux Jason se balade tranquillement à vélo."
+    surligne: [tranquillement, à, vélo]
+    reponses:
+      A: "Il tente un stunt en mode Lasalle"
+      B: "High kick dans la grand-mère du PNJ"
+      C: "Il se fait renverser par une voiture"
+    bonne_reponse: B
+    script: |                   # proposition, en attente de validation
+      [mysterious] Dans cette situation…
+      Le bon vieux Jason se balade tranquillement à vélo. [sarcastic] Le soleil, la piste cyclable, les petits oiseaux… trop calme pour être honnête.
+      A : il tente un stunt en mode Lasalle.
+      B : high kick dans la grand-mère du PNJ.
+      C : il se fait renverser par une voiture.
+      [excited] À toi de jouer ! T'as cinq secondes.
+      [whispers] Regarde bien…
+      [laughs] Réponse B ! [mocking] Pied dans la tête de mamie, sans freiner, sans se retourner… Jason, t'es pas un cycliste, t'es un danger public.
       [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
     ajustements: {}

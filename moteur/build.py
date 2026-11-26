@@ -184,9 +184,10 @@ def minutage(v, R, reg, clip_len):
     T['resume'] = T['timeUp'] + 0.4
     # 2e partie de la voix (« Regarde bien… » → fin), calée sur le gameplay si revelation_a est donné
     suite_a = float(v.get('suite_depuis', pause_a))   # la suite peut reprendre plus loin dans l'extrait
+    vit = float(v.get('suite_ralenti', 1.0))           # 0.5 = la suite est jouée au ralenti (×0,5)
     O2 = T['resume'] + 0.1 - R['regarde']
     if v.get('revelation_a') is not None:
-        O2 = max(O2, T['resume'] + (float(v['revelation_a']) - suite_a) - R['reponse'])
+        O2 = max(O2, T['resume'] + (float(v['revelation_a']) - suite_a) / vit - R['reponse'])
     else:
         O2 = max(O2, T['resume'] + reg['revelation_apres'] - R['reponse'])
     T['reveal'] = R['reponse'] + O2 - 0.05
@@ -199,9 +200,9 @@ def minutage(v, R, reg, clip_len):
             T[k] = [x + float(d) for x in T[k]]
         elif k in T:
             T[k] += float(d)
-    suite_len = min(T['outro'][0] + 0.4 - T['resume'], clip_len - suite_a)
+    suite_len = min(T['outro'][0] + 0.4 - T['resume'], (clip_len - suite_a) / vit)  # en secondes de vidéo finale
     coupe = (R['fin_question'] + R['regarde']) / 2
-    return T, dict(O1=O1, O2=O2, intro_start=intro_start, pause_a=pause_a, suite_a=suite_a, suite_len=suite_len,
+    return T, dict(O1=O1, O2=O2, intro_start=intro_start, pause_a=pause_a, suite_a=suite_a, vit=vit, suite_len=suite_len,
                    coupe=coupe, duree=dur)
 
 
@@ -256,7 +257,7 @@ def construire(v, reg, force=False, apercu=False, seulement_reperes=False):
     conf = {'cfg': cfg, 'T': T, 'duree': M['duree'], 'logo': f"file://{ROOT / 'assets' / 'logo.png'}"}
 
     # images du gameplay (intro, image figée, suite)
-    sig = f"{clip.stat().st_mtime}-{M['intro_start']}-{M['pause_a']}-{M['suite_a']}-{M['suite_len']:.2f}"
+    sig = f"{clip.stat().st_mtime}-{M['intro_start']}-{M['pause_a']}-{M['suite_a']}-{M['vit']}-{M['suite_len']:.2f}"
     ancien = (work / 'images.sig').read_text() if (work / 'images.sig').exists() else ''
     if ancien != sig:
         for d in ('intro', 'suite'):
@@ -266,8 +267,8 @@ def construire(v, reg, force=False, apercu=False, seulement_reperes=False):
              '-vf', vf, '-q:v', '3', str(work / 'intro' / '%04d.jpg')])
         run(['ffmpeg', '-v', 'error', '-y', '-ss', str(M['pause_a']), '-i', str(clip), '-frames:v', '1',
              '-vf', vf.replace('fps=30,', ''), '-q:v', '2', str(work / 'freeze.jpg')])
-        run(['ffmpeg', '-v', 'error', '-y', '-ss', str(M['suite_a']), '-i', str(clip), '-t', str(M['suite_len'] + 0.2),
-             '-vf', vf, '-q:v', '3', str(work / 'suite' / '%04d.jpg')])
+        run(['ffmpeg', '-v', 'error', '-y', '-ss', str(M['suite_a']), '-i', str(clip), '-t', str((M['suite_len'] + 0.2) * M['vit']),
+             '-vf', f"setpts=PTS/{M['vit']}," + vf, '-q:v', '3', str(work / 'suite' / '%04d.jpg')])
         (work / 'images.sig').write_text(sig)
     conf['images'] = {'intro': len(list((work / 'intro').glob('*.jpg'))), 'suite': len(list((work / 'suite').glob('*.jpg')))}
     (work / 'config.json').write_text(json.dumps(conf, ensure_ascii=False, indent=1))
@@ -287,8 +288,8 @@ def construire(v, reg, force=False, apercu=False, seulement_reperes=False):
     a = lambda n: str(work / n)
     run(['ffmpeg', '-v', 'error', '-y', '-ss', str(M['intro_start']), '-i', str(clip), '-t', str(T['pause']), '-vn',
          '-ac', '2', '-ar', '48000', '-af', f"afade=t=out:st={max(0, T['pause'] - 0.03):.3f}:d=0.03", a('jeu_intro.wav')])
-    run(['ffmpeg', '-v', 'error', '-y', '-ss', str(M['suite_a']), '-i', str(clip), '-t', str(M['suite_len']), '-vn',
-         '-ac', '2', '-ar', '48000', '-af', f"afade=t=in:d=0.03,afade=t=out:st={max(0, M['suite_len'] - 0.5):.3f}:d=0.5", a('jeu_suite.wav')])
+    run(['ffmpeg', '-v', 'error', '-y', '-ss', str(M['suite_a']), '-i', str(clip), '-t', str(M['suite_len'] * M['vit']), '-vn',
+         '-ac', '2', '-ar', '48000', '-af', f"atempo={M['vit']},afade=t=in:d=0.03,afade=t=out:st={max(0, M['suite_len'] - 0.5):.3f}:d=0.5", a('jeu_suite.wav')])
     d1, d2, c = int(M['O1'] * 1000), int((M['coupe'] + M['O2']) * 1000), M['coupe']
     run(['ffmpeg', '-v', 'error', '-y', '-i', str(voix), '-filter_complex',
          f"[0:a]atrim=0:{c:.3f},afade=t=out:st={c - 0.06:.3f}:d=0.06,asetpts=PTS-STARTPTS,adelay={d1}|{d1}[v1];"

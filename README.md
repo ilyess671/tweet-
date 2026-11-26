@@ -14,6 +14,7 @@ Titre gameplay : Braquage à l'épicerie
 Pause à : 8 s
 Réponse visible à : 10,2 s        (facultatif)
 La suite reprend à : 22 s         (facultatif, sinon elle reprend à la pause)
+Ralenti : oui                     (facultatif, pour les extraits très courts)
 Situation : Jason tente un braquage discret à l'épicerie
 Surligner : braquage discret      (facultatif)
 A : La police attend Jason à la sortie

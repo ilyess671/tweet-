@@ -17,7 +17,8 @@ extraits de gameplay GTA VI de l'utilisateur. Le style est **validé** : ne pas 
 3. Ajouter un bloc dans `situations.yaml` (copier le modèle de la vidéo 1). Toujours regarder
    l'extrait (planche d'images + sous-titres du jeu) pour vérifier la bonne réponse et le moment où elle
    se voit (`revelation_a`). Si la réponse arrive longtemps après la pause, utiliser `suite_depuis`
-   pour que « la suite » reprenne juste avant (sinon la suite est trop longue).
+   pour que « la suite » reprenne juste avant (sinon la suite est trop longue). Si l'extrait est
+   trop court pour couvrir la voix de la révélation (~10 s), mettre `suite_ralenti: 0.5`.
 4. `python3 moteur/build.py NN --reperes` : vérifier que tous les repères de la voix sont trouvés.
 5. `python3 moteur/build.py NN --apercu` : regarder `sorties/apercus/apercu-NN.png` (8 images clés).
 6. `python3 moteur/build.py NN` (≈ 6 min pour 50 s ; lancer en arrière-plan pour plusieurs vidéos).
