@@ -51,6 +51,11 @@ Si la voix enchaîne trop vite (ex. « B, C » d'affilée), insérer des blancs 
 `ajustements: {silences: [[11.30, 1.8], [12.06, 1.8]]}` = [temps dans la voix d'origine, durée].
 Tous les repères après un blanc sont décalés automatiquement (les repères forcés restent en temps d'origine).
 
+## Sons de mème
+`sons: [[11.12, vine_boom], [11.86, vine_boom]]` dans le bloc = [temps dans la voix d'origine, son].
+`vine_boom` est recréé par programme (libre de droits, pas l'original) ; un fichier de `entrees/`
+(ex. `bruh-05.mp3`) marche aussi. Volume : `volume_memes_db` dans le bloc.
+
 ## Corrections précises (« à 45,2 s le pop est trop grand »)
 - Repérer l'élément avec `.cache/NN/config.json` (clé `T` = moments clés en secondes de la vidéo finale).
 - Changement de **minutage d'une seule vidéo** : `ajustements: {decalages: {reveal: 0.3}}`

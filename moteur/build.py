@@ -33,6 +33,7 @@ DEFAUTS = {
     'volume_suite_db': 8,     # gain du son du jeu pendant la suite (baissé auto. sous la voix)
     'volume_voix_db': 2,
     'volume_bruitages_db': -4,
+    'volume_memes_db': 0,     # sons de mème (vine boom…)
     'revelation_apres': 2.3,  # si revelation_a absent : « Réponse » tombe ~2,3 s après la reprise
 }
 
@@ -336,19 +337,27 @@ def construire(v, reg, force=False, apercu=False, seulement_reperes=False):
          f"[v1][v2]amix=inputs=2:normalize=0,aformat=channel_layouts=stereo,aresample=48000,apad,atrim=0:{M['duree']:.3f}[v]",
          '-map', '[v]', a('voix_placee.wav')])
     S.mix(evenements(T), M['duree'], a('bruitages.wav'))
+    # sons de mème placés sur la voix : sons: [[temps dans la voix d'origine, 'vine_boom' ou fichier de entrees/], ...]
+    SIL = silences(v); sh = lambda t: t + sum(d for ts, d in SIL if t >= ts)
+    memes = []
+    for t0, nom in v.get('sons') or []:
+        tv = sh(float(t0)); tv += M['O1'] if tv < M['coupe'] else M['O2']
+        memes.append((tv, S.SONS[nom]() if nom in S.SONS else S.charger(ENTREES / nom)))
+    S.piste(memes, M['duree'], a('memes.wav'))
 
     print(f"#{num:02d} rendu de l'animation ({M['duree']:.1f} s)…")
     run(['node', str(MOTEUR / 'render.js'), str(work)])
     dr = int(T['resume'] * 1000)
     SORTIES.mkdir(exist_ok=True)
     run(['ffmpeg', '-v', 'error', '-y', '-i', a('video_muette.mp4'), '-i', a('voix_placee.wav'), '-i', a('bruitages.wav'),
-         '-i', a('jeu_intro.wav'), '-i', a('jeu_suite.wav'), '-filter_complex',
+         '-i', a('jeu_intro.wav'), '-i', a('jeu_suite.wav'), '-i', a('memes.wav'), '-filter_complex',
          f"[1:a]volume={reg['volume_voix_db']}dB,asplit=2[vo][vsc];"
          f"[2:a]volume={reg['volume_bruitages_db']}dB[fx];"
          f"[3:a]volume={reg['volume_jeu_db']}dB,apad[g];"
          f"[4:a]volume={reg['volume_suite_db']}dB,adelay={dr}|{dr},apad,atrim=0:{M['duree']:.3f}[s0];"
          "[s0][vsc]sidechaincompress=threshold=0.02:ratio=8:attack=15:release=350:makeup=1[s];"
-         "[vo][fx][g][s]amix=inputs=4:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[a]",
+         f"[5:a]volume={reg.get('volume_memes_db', 0)}dB[m];"
+         "[vo][fx][g][s][m]amix=inputs=5:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[a]",
          '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-shortest', str(out)])
     print(f'#{num:02d} terminé : {out}')
     return out

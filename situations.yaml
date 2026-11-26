@@ -108,5 +108,6 @@ videos:
       [whispers] Regarde bien…
       Réponse B et C. Jason se relève comme un Cotorep qui a pas été modélisé depuis 13 ans. Wesh, Rockstar, vous abusez là.
       [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
+    sons: [[11.12, vine_boom], [11.86, vine_boom]]   # « BOUM » juste après « B » et après « C »
     ajustements:
       silences: [[11.30, 1.8], [12.06, 1.8]]   # blancs après « B » et après « C » pour laisser voir les mèmes

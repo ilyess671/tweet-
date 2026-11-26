@@ -100,3 +100,43 @@ def mix(events, dur, out_path, with_pad=False):
         w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
         w.writeframes((st * 32767).astype('<i2').tobytes())
 
+
+
+def vine_boom(vol=1.0):
+    """« BOUM » façon mème (recréé de zéro) : coup grave qui descend, saturé, avec résonance."""
+    d = 1.6; t = t_(d)
+    f = 45 + 110 * np.exp(-t / 0.05)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    body = np.sin(ph) + 0.5 * np.sin(2 * ph) + 0.25 * np.sin(3 * ph)
+    e = np.minimum(1, t / 0.004) * np.exp(-t / 0.45)
+    x = np.tanh(2.5 * body * e)
+    n = int(0.03 * SR)
+    x[:n] += 0.8 * lowpass(rng.standard_normal(n), 2500) * env(n, 0.0005, 0.008)
+    out = x.copy()
+    for dl, g in [(0.043, 0.35), (0.071, 0.3), (0.097, 0.25), (0.131, 0.2), (0.173, 0.15)]:
+        k = int(dl * SR); out[k:] += g * x[:-k]
+    out = lowpass(out, 3000)
+    return vol * out / np.abs(out).max()
+
+
+SONS = {'vine_boom': vine_boom}
+
+
+def charger(path):
+    """Son fourni par l'utilisateur (mp3/wav) → tableau mono 48 kHz."""
+    import subprocess
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', str(path), '-f', 'f32le', '-ac', '1', '-ar', str(SR), '-'],
+                         capture_output=True, check=True).stdout
+    return np.frombuffer(raw, dtype='<f4').astype(float)
+
+
+def piste(events, dur, out_path):
+    """Comme mix() mais sans normalisation (pour les sons de mème, gardés à leur volume)."""
+    track = np.zeros(int(dur * SR) + SR)
+    for t0, s in events:
+        st = int(t0 * SR); track[st:st + len(s)] += s[:len(track) - st]
+    track = np.clip(track[:int(dur * SR)], -1, 1)
+    st = np.stack([track, track], 1)
+    with wave.open(out_path, 'wb') as w:
+        w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
+        w.writeframes((st * 32767 * 0.9).astype('<i2').tobytes())
