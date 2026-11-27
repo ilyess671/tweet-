@@ -146,15 +146,17 @@ videos:
       B: "Le couple se fait arnaquer par le garagiste"
       C: "La voiture n'a pas apprécié d'être vendue"
     bonne_reponse: C
-    # extrait de 6,8 s seulement : phrase de révélation très courte pour limiter l'image figée
-    script: |                   # proposition, en attente de validation
+    # extrait de 6,8 s : la scène, puis un replay ×0,4, puis un super ralenti ×0,2 sur l'impact
+    suite_segments: [[4.0, 6.83, 1.0], [4.6, 6.83, 0.4], [5.0, 6.2, 0.2]]
+    revelation_segment: 2       # « Réponse C » tombe sur l'impact dans le 1er replay
+    script: |                   # voix finale de l'utilisateur
       [mysterious] Dans cette situation…
-      Jason et Lucia vendent leur voiture au garage. [sarcastic] Mille trois cent cinquante-cinq dollars pour une voiture de luxe… le business du siècle.
+      Jason et Lucia vendent leur voiture au garage. Une de perdue, dix de retrouvées.
       A : le couple récupère plus de 30 000 dollars.
       B : le couple se fait arnaquer par le garagiste.
       C : la voiture n'a pas apprécié d'être vendue.
       [excited] À toi de jouer ! T'as cinq secondes.
       [whispers] Regarde bien…
-      [laughs] Réponse C ! Rancunière, la bagnole.
+      [laughs] Réponse C ! À peine sortie, la voiture balance un morceau de carrosserie dans la grosse tête de Jason. Rancunière, la bagnole.
       [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
     ajustements: {}

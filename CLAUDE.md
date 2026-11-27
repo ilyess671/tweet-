@@ -46,6 +46,12 @@ Si un repère n'est pas trouvé, le forcer dans le bloc : `ajustements: {reperes
 (temps en secondes dans le fichier voix ; clés : debut, situation, A, B, C, C_fin, jouer,
 fin_question, regarde, reponse, avant_outro, outro, abonne, surlignage).
 
+## Replay façon télé (extraits trop courts)
+`suite_segments: [[4.0, 6.83, 1.0], [4.6, 6.83, 0.4], [5.0, 6.2, 0.2]]` = [début, fin, vitesse] dans
+l'extrait, joués à la suite : le 1er normalement, les suivants sont des replays (flash, étiquette
+« ● Replay », son du jeu coupé, whoosh). `revelation_segment: 2` = la réponse tombe dans le 1er replay.
+L'utilisateur n'aime pas le ralenti sur toute la suite : préférer ce replay quand l'extrait est court.
+
 ## Blancs dans la voix
 Si la voix enchaîne trop vite (ex. « B, C » d'affilée), insérer des blancs :
 `ajustements: {silences: [[11.30, 1.8], [12.06, 1.8]]}` = [temps dans la voix d'origine, durée].

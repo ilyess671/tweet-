@@ -74,6 +74,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#f3eff4;font-fam
    CONFIG.cfg = textes de la vidéo, CONFIG.T = moments clés en secondes. */
 const CFG=window.CONFIG.cfg;
 const T=window.CONFIG.T;
+const REP=T.replays||[];   // débuts des replays (vidéo rejouée au ralenti)
 
 const $=id=>document.getElementById(id);
 const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
@@ -155,7 +156,7 @@ window.render=function(t){
   im.style.transform=`scale(${1+0.06*punch})`;
   im.style.filter=frozen?`saturate(${lerp(1,.75,punch)}) contrast(1.06)`:'none';
   const imo=1-prog(t,T.outro[0],T.outro[0]+.2);im.style.opacity=imo;im.style.filter+=imo<1?` blur(${(1-imo)*14}px)`:'';
-  $('gflash').style.opacity=t<T.pause?0:.95*(1-eoCubic(prog(t,T.pause,T.pause+.35)))+(t>=T.resume?.6*(1-eoCubic(prog(t,T.resume,T.resume+.25))):0);
+  $('gflash').style.opacity=t<T.pause?0:.95*(1-eoCubic(prog(t,T.pause,T.pause+.35)))+(t>=T.resume?.6*(1-eoCubic(prog(t,T.resume,T.resume+.25))):0)+REP.reduce((m,x)=>m+(t>=x?.8*(1-eoCubic(prog(t,x,x+.3))):0),0);
   const b1=prog(t,T.outro[1]-0.1,T.outro[1]+0.05)*(1-prog(t,T.click+0.05,T.click+0.15));$('Lbtn').style.opacity=b1;$('Lbtn').style.filter=`blur(${(1-b1)*10}px)`;
   const b2=prog(t,T.click+0.1,T.click+0.25);$('Lbtn2').style.opacity=b2;$('Lbtn2').style.filter=`blur(${(1-b2)*10}px)`;
   const af=prog(t,T.outro[1]+0.3,T.outro[1]+0.7);$('after').style.opacity=eoCubic(af);$('after').style.filter=`blur(${(1-eoCubic(af))*10}px)`;
@@ -189,9 +190,10 @@ window.render=function(t){
   if(t<T.pause){html='<span class="dot" style="background:#2a7bff"></span>'+CFG.label;show=prog(t,.25,.5);}
   else if(t<T.toQuiz[0]+0.2){html='<span class="dot" style="background:#ff2d55"></span>❚❚ Pause';pw=220;show=1-prog(t,T.toQuiz[0],T.toQuiz[0]+.2);}
   else if(t>=T.pillStars&&t<T.resume){html='<div id="stars" style="display:flex;gap:8px">'+T.stars.map((_,i)=>star(i)).join('')+'</div>';pw=390;show=prog(t,T.pillStars,T.pillStars+.2);}
-  else if(t>=T.resume&&t<T.outro[0]+0.2){html='<span class="dot" style="background:#16b85c"></span>▶ La suite';pw=240;show=prog(t,T.resume,T.resume+.2)*(1-prog(t,T.outro[0],T.outro[0]+.2));}
+  else if(t>=T.resume&&t<T.outro[0]+0.2){const rp=REP.filter(x=>t>=x).length;
+    html=rp?`<span class="dot" style="background:#ff2d55;opacity:${0.35+0.65*(Math.sin(t*9)>0?1:0)}"></span>Replay${rp>1?' ×'+rp:''}`:'<span class="dot" style="background:#16b85c"></span>▶ La suite';pw=rp?(rp>1?230:200):240;show=prog(t,T.resume,T.resume+.2)*(1-prog(t,T.outro[0],T.outro[0]+.2));}
   if(P._h!==html){P.innerHTML=html;P._h=html;}
-  const swap=[T.pause,T.resume].reduce((m,a)=>m+(t>=a&&t<a+.2?Math.sin(Math.PI*prog(t,a,a+.2)):0),0);
+  const swap=[T.pause,T.resume,...REP].reduce((m,a)=>m+(t>=a&&t<a+.2?Math.sin(Math.PI*prog(t,a,a+.2)):0),0);
   Object.assign(P.style,{width:pw+'px',left:(540-pw/2)+'px',top:(S.y-31)+'px',opacity:show,filter:`blur(${(1-show)*10+swap*6}px)`,transform:`scale(${lerp(.8,1,eoBack(Math.min(1,show)))*(1+swap*0.08)})`});
   if(t>=T.pillStars&&t<T.resume){T.stars.forEach((st,i)=>{const sv=$('s'+i);if(!sv)return;const on=t>=st;const q=prog(t,st,st+.35);const path=sv.firstChild;
       path.style.fill=on?'#ffc400':'#ece7f2';path.style.stroke=on?'#e0a800':'#d6cfe0';
