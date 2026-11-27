@@ -144,17 +144,17 @@ videos:
     reponses:
       A: "Le couple récupère plus de 30 000 dollars"
       B: "Le couple se fait arnaquer par le garagiste"
-      C: "La voiture n'apprécie pas de s'être fait vendre"
+      C: "La voiture n'a pas apprécié d'être vendue"
     bonne_reponse: C
-    # extrait de 6,8 s seulement : choix à faire (extrait plus long / replay au ralenti / image figée)
+    # extrait de 6,8 s seulement : phrase de révélation très courte pour limiter l'image figée
     script: |                   # proposition, en attente de validation
       [mysterious] Dans cette situation…
       Jason et Lucia vendent leur voiture au garage. [sarcastic] Mille trois cent cinquante-cinq dollars pour une voiture de luxe… le business du siècle.
       A : le couple récupère plus de 30 000 dollars.
       B : le couple se fait arnaquer par le garagiste.
-      C : la voiture n'apprécie pas de s'être fait vendre.
+      C : la voiture n'a pas apprécié d'être vendue.
       [excited] À toi de jouer ! T'as cinq secondes.
       [whispers] Regarde bien…
-      [laughs] Réponse C ! À peine sortis, la voiture balance un morceau de carrosserie dans la tête de Jason. Rancunière, la bagnole.
+      [laughs] Réponse C ! Rancunière, la bagnole.
       [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
     ajustements: {}
