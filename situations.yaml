@@ -111,3 +111,26 @@ videos:
     sons: [[11.12, vine_boom], [11.86, vine_boom]]   # « BOUM » juste après « B » et après « C »
     ajustements:
       silences: [[11.30, 1.8], [12.06, 1.8]]   # blancs après « B » et après « C » pour laisser voir les mèmes
+
+  - numero: 5
+    titre_gameplay: "Madame la directrice"
+    pause_a: 4.0                # les deux flics avancent, main sur l'arme
+    revelation_a: 8.3           # la caméra lâche les flics et suit la femme en jupe rouge
+    situation: "Jason filme une potentielle bavure policière."
+    surligne: [bavure, policière]
+    reponses:
+      A: "Ça va toi, viens voir !!"
+      B: "Il se fait arrêter par les flics"
+      C: "Lucia lâche un coup de coude à un des deux flics"
+    bonne_reponse: A
+    script: |                   # proposition, en attente de validation
+      [mysterious] Dans cette situation…
+      Jason filme une potentielle bavure policière. [sarcastic] Téléphone en main, mode reporter activé… il se prend pour un journaliste d'investigation.
+      A : ça va toi, viens voir !
+      B : il se fait arrêter par les flics.
+      C : Lucia lâche un coup de coude à un des deux flics.
+      [excited] À toi de jouer ! T'as cinq secondes.
+      [whispers] Regarde bien…
+      [laughs] Réponse A ! Les flics ? Quels flics ? Une jupe rouge passe, et Jason oublie toute sa mission. Le journalisme, c'est fini.
+      [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
+    ajustements: {}
