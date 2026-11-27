@@ -134,3 +134,27 @@ videos:
       Réponse A : Les flics ? Quels flics ? Guette-le ce Jason, il a déjà oublié ce qu'il filmait, ce tocard, un vrai charo.
       [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
     ajustements: {}
+
+  - numero: 6
+    titre_gameplay: "Vente au garage"
+    pause_a: 4.0                # le couple sort du garage
+    revelation_a: 5.25          # une pièce de la voiture vole et percute Jason
+    situation: "Jason et Lucia vendent leur voiture au garage."
+    surligne: [vendent, leur, voiture]
+    reponses:
+      A: "Le couple récupère plus de 30 000 dollars"
+      B: "Le couple se fait arnaquer par le garagiste"
+      C: "La voiture n'apprécie pas de s'être fait vendre"
+    bonne_reponse: C
+    # extrait de 6,8 s seulement : choix à faire (extrait plus long / replay au ralenti / image figée)
+    script: |                   # proposition, en attente de validation
+      [mysterious] Dans cette situation…
+      Jason et Lucia vendent leur voiture au garage. [sarcastic] Mille trois cent cinquante-cinq dollars pour une voiture de luxe… le business du siècle.
+      A : le couple récupère plus de 30 000 dollars.
+      B : le couple se fait arnaquer par le garagiste.
+      C : la voiture n'apprécie pas de s'être fait vendre.
+      [excited] À toi de jouer ! T'as cinq secondes.
+      [whispers] Regarde bien…
+      [laughs] Réponse C ! À peine sortis, la voiture balance un morceau de carrosserie dans la tête de Jason. Rancunière, la bagnole.
+      [warm] Et toi, t'avais trouvé ? Abonne-toi pour la prochaine situation !
+    ajustements: {}
