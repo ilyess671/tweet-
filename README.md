@@ -26,6 +26,14 @@ Script : (le texte de la voix)
 Si tu n'as qu'une idée en vrac, envoie-la : Claude écrit le script drôle avec les intonations,
 tu le valides, tu génères la voix sur ElevenLabs et tu l'envoies.
 
+## Règles pour l'extrait de gameplay
+
+- Garde au moins **8 secondes après le moment où on voit la réponse**. Sinon la dernière image reste
+  figée à la fin, le temps que Victoria finisse sa phrase. Tu peux aussi envoyer l'extrait en entier :
+  seul le passage utile est gardé.
+- Chaque fichier envoyé dans le chat doit faire **moins de 30 Mo**. Coupe le début inutile, ou envoie
+  en 720p ou en plusieurs morceaux.
+
 ## Règles pour le script de la voix
 
 Pour que tout se cale tout seul, la voix doit dire, dans cet ordre :
